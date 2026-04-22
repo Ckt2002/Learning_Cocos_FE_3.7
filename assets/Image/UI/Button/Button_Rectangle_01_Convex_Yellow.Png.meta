@@ -11,7 +11,7 @@
     "6c48a": {
       "importer": "texture",
       "uuid": "28e24e85-e152-4a45-b1a3-d16eee57815a@6c48a",
-      "displayName": "Button_Rectangle_01_Convex_Yellow.Png",
+      "displayName": "Button_Rectangle_01_Convex_Yellow",
       "id": "6c48a",
       "name": "texture",
       "userData": {
@@ -35,7 +35,7 @@
     "f9941": {
       "importer": "sprite-frame",
       "uuid": "28e24e85-e152-4a45-b1a3-d16eee57815a@f9941",
-      "displayName": "Button_Rectangle_01_Convex_Yellow.Png",
+      "displayName": "Button_Rectangle_01_Convex_Yellow",
       "id": "f9941",
       "name": "spriteFrame",
       "userData": {
