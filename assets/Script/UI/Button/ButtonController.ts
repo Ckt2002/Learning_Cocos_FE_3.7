@@ -7,17 +7,11 @@ export class ButtonController extends Component {
     @property({ type: Enum(EButtonEvent) })
     buttonEventType: EButtonEvent;
 
-    targetNode: Node = null;
-    buttonEvent: Function = null;
-    button: Button = null;
+    @property({ visible: false })
+    private targetNode: Node = null;
 
-    protected onLoad(): void {
-        this.button = this.node.getComponent(Button);
-    }
-
-    public setupEvent(targetNode: Node, event: Function) {
+    public setupEvent(targetNode: Node) {
         this.targetNode = targetNode;
-        this.buttonEvent = event;
     }
 
     public buttonAction() {

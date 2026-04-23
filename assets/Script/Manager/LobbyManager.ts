@@ -14,29 +14,34 @@ export class LobbyManager extends Component {
     lobbyNode: Node = null;
 
     @property([Node])
-    lobbyNodes: Node[] = [];
+    lobbyUINodes: Node[] = [];
 
-    @property([ButtonManager])
-    buttonManagers: ButtonManager[] = [];
+    @property({
+        type: ButtonManager,
+        visible: false,
+    })
+    buttonManager: ButtonManager = null;
 
     protected onLoad(): void {
         this.lobbyNode = this.node.children[0];
-        this.buttonManagers = this.node.getComponentsInChildren(ButtonManager);
+        this.buttonManager = this.node.getComponent(ButtonManager);
     }
 
     protected start(): void {
         this.startInit();
     }
 
-    private startInit(): void {
-        this.registerEvents();
-        this.setupButtonManagers();
+    protected onDestroy(): void {
+        mEventEmitter.instance.removeAllOwnerEvents(this);
     }
 
-    private setupButtonManagers() {
-        for (let manager of this.buttonManagers) {
-            manager.setupTargetNodeEvent(this.node, this.lobbyEventHandler.bind(this));
-        }
+    private startInit(): void {
+        this.registerEvents();
+        this.setupButtonManager();
+    }
+
+    private setupButtonManager() {
+        this.buttonManager.setupTargetNodeEvent(this.node);
     }
 
     private registerEvents(): void {
@@ -54,10 +59,6 @@ export class LobbyManager extends Component {
         this.lobbyNode.active = false;
     }
 
-    protected onDestroy(): void {
-        mEventEmitter.instance.removeAllOwnerEvents(this);
-    }
-
     private lobbyEventHandler(buttonEvent: EButtonEvent) {
         switch (buttonEvent) {
             case EButtonEvent.START_ROUND:
@@ -65,8 +66,8 @@ export class LobbyManager extends Component {
                 break;
 
             default:
-                for (let index = 0; index < this.lobbyNodes.length; index++) {
-                    this.lobbyNodes[index].active = buttonEvent === index;
+                for (let index = 0; index < this.lobbyUINodes.length; index++) {
+                    this.lobbyUINodes[index].active = buttonEvent === index;
                 }
                 break;
         }

@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, Enum, EventHandler, Node } from 'cc';
+import { _decorator, Component, Node } from 'cc';
 const { ccclass, property } = _decorator;
 import { ButtonController } from "../UI/Button/ButtonController";
 
@@ -8,7 +8,6 @@ export class ButtonManager extends Component {
     childButtons: ButtonController[] = [];
 
     private targetNode: Node = null;
-    private event: Function = null;
 
     protected onLoad(): void {
         this.childButtons = this.node.getComponentsInChildren(ButtonController);
@@ -18,14 +17,13 @@ export class ButtonManager extends Component {
         this.initStart();
     }
 
-    public setupTargetNodeEvent(target: Node, event: Function): void {
+    public setupTargetNodeEvent(target: Node): void {
         this.targetNode = target;
-        this.event = event;
     }
 
     private initStart() {
         for (let controller of this.childButtons) {
-            controller.setupEvent(this.targetNode, this.event);
+            controller.setupEvent(this.targetNode);
         }
     }
 }
