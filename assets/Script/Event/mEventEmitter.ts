@@ -1,22 +1,54 @@
 import { EventTarget } from "cc";
 
-export class mEventTarget {
-    static instance: mEventTarget | null;
+export class mEventEmitter {
+    static instance: mEventEmitter | null;
 
     eventTarget: EventTarget;
-    listenerMap: Map<any, { eventName: string, method: any }[]>;
+    listenerMap: Map<any, { eventName: string | number, method: any }[]>;
 
     constructor() {
-        if (mEventTarget.instance) {
+        if (mEventEmitter.instance) {
             return;
         }
 
-        mEventTarget.instance = this;
+        mEventEmitter.instance = this;
         this.eventTarget = new EventTarget();
-        this.listenerMap = new Map<any, { eventName: string, method: any }[]>();
+        this.listenerMap = new Map<any, { eventName: string | number, method: any }[]>();
     }
 
-    registerEvent(eventName: string, method: any, owner: any) {
+    public registerEvent(eventName: string | number, method: any, owner: any): void {
         this.eventTarget.on(eventName, method);
+
+        if (!this.listenerMap.has(owner)) {
+            this.listenerMap.set(owner, []);
+        }
+
+        this.listenerMap.get(owner).push({ eventName, method });
+    }
+
+    public emit(eventName: string | number, ...args) {
+        this.eventTarget.emit(eventName, ...args);
+    }
+
+    public removeEvent(eventName: string | number, method: any, target: any): void {
+        this.eventTarget.off(eventName, method, target);
+    }
+
+    public removeAllOwnerEvents(owner: any): void {
+        if (!this.listenerMap.has(owner)) {
+            return;
+        }
+
+        const listenerArray = this.listenerMap.get(owner);
+        for (let listener of listenerArray) {
+            this.removeEvent(listener.eventName, listener.method, owner);
+        }
+        this.listenerMap.delete(owner);
+    }
+
+    public destroy(): void {
+        this.listenerMap.clear();
+        this.eventTarget = null;
+        mEventEmitter.instance = null;
     }
 }
