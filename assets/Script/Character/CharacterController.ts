@@ -3,7 +3,4 @@ const { ccclass, property } = _decorator;
 
 @ccclass('CharacterController')
 export class CharacterController extends Component {
-    protected onLoad(): void {
-
-    }
 }

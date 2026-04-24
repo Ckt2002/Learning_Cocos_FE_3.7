@@ -1,78 +1,79 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Node } from 'cc';
 import { mEventEmitter } from '../Event/mEventEmitter';
 import { CLayerEvent } from '../Constant/CLayerEvent';
 import { EPopup } from '../Enum/EPopup';
-import { ButtonManager } from './ButtonManager';
 import { EButtonEvent } from '../Enum/EButtonEvent';
 import { CGameEvent } from '../Constant/CGameEvent';
 import { EGameState } from '../Enum/EGameState';
+import { BaseLayerManager } from './BaseLayerManager';
 const { ccclass, property } = _decorator;
 
 @ccclass("PopupManager")
-export class PopupManager extends Component {
-    @property(Node)
-    popupNode: Node = null;
+export class PopupManager extends BaseLayerManager<EPopup> {
 
     @property([Node])
     popupUINodes: Node[] = [];
 
-    @property({
-        type: ButtonManager,
-        visible: false,
-    })
-    buttonManager: ButtonManager = null;
+    private activatedNodes: Node[] = [];
 
     protected onLoad(): void {
-        this.popupNode = this.node.children[0];
-        this.buttonManager = this.node.getComponent(ButtonManager);
+        super.onLoad();
+        this.activatedNodes = [];
     }
 
-    protected start(): void {
-        this.startInit();
+    protected registerEvents(): void {
+        mEventEmitter.instance.registerEvent(CLayerEvent.ENABLE_POPUP, this.enableContainer.bind(this), this);
+        mEventEmitter.instance.registerEvent(CLayerEvent.DISABLE_POPUP, this.disableContainer.bind(this), this);
+
+        super.registerEvents();
     }
 
-    protected onDestroy(): void {
-        mEventEmitter.instance.removeAllOwnerEvents(this);
-    }
-
-    private startInit(): void {
-        this.registerEvents();
-        this.setupButtonManager();
-    }
-
-    private setupButtonManager() {
-        this.buttonManager.setupTargetNodeEvent(this.node);
-    }
-
-    private registerEvents(): void {
-        mEventEmitter.instance.registerEvent(CLayerEvent.ENABLE_POPUP, this.enableLayer.bind(this), this);
-        mEventEmitter.instance.registerEvent(CLayerEvent.DISABLE_POPUP, this.disableLayer.bind(this), this);
-
-        this.node.on('ButtonEvent', this.popupEventHandler.bind(this), this);
-    }
-
-    private enableLayer(popupType: EPopup): void {
-        console.log(popupType);
-        if (!this.popupNode.active) {
-            this.popupNode.active = true;
-        }
+    protected enableContainer(popupType?: EPopup): void {
+        super.enableContainer(popupType);
         this.popupUINodes[popupType].active = true;
+        this.activatedNodes.push(this.popupUINodes[popupType]);
     }
 
-    private disableLayer(popupType: EPopup): void {
-        this.popupNode.active = false;
+    protected disableContainer(popupType?: EPopup): void {
+        if (!popupType || this.activatedNodes.length <= 1) {
+            this.container.active = false;
+        }
+
+        if (!popupType) {
+            for (let node of this.activatedNodes) {
+                node.active = false;
+            }
+            this.activatedNodes = [];
+            return;
+        }
+
         this.popupUINodes[popupType].active = false;
+        const index = this.activatedNodes.indexOf(this.popupUINodes[popupType], 0);
+        this.activatedNodes.splice(index, 1);
     }
 
-    private popupEventHandler(buttonEvent: EButtonEvent) {
-        console.log(buttonEvent);
+    protected layerEventHandler(buttonEvent: EButtonEvent) {
+        let gameState: EGameState = EGameState.CLOSE_SETTING;
         switch (buttonEvent) {
             case EButtonEvent.RESUME_GAME:
-                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.RESUME_GAME)
+                gameState = EGameState.RESUME_GAME;
+                break;
+
+            case EButtonEvent.OPEN_SETTING:
+                gameState = EGameState.OPEN_SETTING;
+                break;
+
+            case EButtonEvent.CLOSE_SETTING:
+                gameState = EGameState.CLOSE_SETTING;
+                break;
+
+            case EButtonEvent.QUIT_GAME:
+                gameState = EGameState.QUIT_GAME;
                 break;
 
             default:
                 break;
         }
+        mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, gameState);
     }
 }

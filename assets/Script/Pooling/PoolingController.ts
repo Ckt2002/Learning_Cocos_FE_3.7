@@ -1,33 +1,48 @@
-import { _decorator, Component, instantiate, Node, Prefab } from 'cc';
+import { _decorator, Component, Enum, instantiate, Node } from 'cc';
+import { SpawnInformation } from '../Spawn/SpawnInformation';
 
-const { ccclass, property } = _decorator;
-
-@ccclass("SpawnInformation")
-export class SpawnInformation {
-    @property(Prefab)
-    public prefab: Prefab = null!;
-
-    @property
-    public spawnNumber: number = 0;
-}
+const { ccclass } = _decorator;
 
 @ccclass("PoolingController")
-export class PoolingController extends Component {
-    @property([SpawnInformation])
-    public prefabs: SpawnInformation[] = [];
-
-    private nodeMap: Map<number, [Node]>;
+export abstract class PoolingController<TInfo extends SpawnInformation> extends Component {
+    private nodeMap: Map<number, Node[]>;
 
     protected onLoad(): void {
         this.nodeMap = new Map();
+        this.spawn();
     }
 
+    protected getPrefabInformation(): TInfo[] {
+        return [];
+    };
+
     public spawn() {
-        for (let detail of this.prefabs) {
+        for (let detail of this.getPrefabInformation()) {
             for (let index = 0; index < detail.spawnNumber; index++) {
                 const newNode = instantiate(detail.prefab);
                 newNode.parent = this.node;
+                newNode.active = false;
+                this.assignToMap(detail.getType(), newNode);
             }
         }
+    }
+
+    protected assignToMap(type: number, newNode: Node) {
+        if (!this.nodeMap.has(type)) {
+            this.nodeMap.set(type, []);
+        }
+        this.nodeMap.get(type).push(newNode);
+    }
+
+    protected getNode(type: number) {
+        const nodeArray = this.nodeMap.get(type);
+        for (let node of nodeArray) {
+            if (!node.active) {
+                return node;
+            }
+        }
+
+        this.spawn();
+        this.getNode(type);
     }
 }

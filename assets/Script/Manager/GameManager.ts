@@ -1,10 +1,10 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component } from 'cc';
 import { mEventEmitter } from '../Event/mEventEmitter';
 import { EGameState } from '../Enum/EGameState';
 import { CLayerEvent } from '../Constant/CLayerEvent';
 import { CGameEvent } from '../Constant/CGameEvent';
 import { EPopup } from '../Enum/EPopup';
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 @ccclass('GameManager')
 export class GameManager extends Component {
@@ -40,8 +40,19 @@ export class GameManager extends Component {
                 break;
 
             case EGameState.RESUME_GAME:
-                console.log("RESUME");
                 this.resumeGameState();
+                break;
+
+            case EGameState.QUIT_GAME:
+                this.quitGameState();
+                break;
+
+            case EGameState.OPEN_SETTING:
+                this.openSettingState();
+                break;
+
+            case EGameState.CLOSE_SETTING:
+                this.closeSettingState();
                 break;
 
             default:
@@ -68,9 +79,18 @@ export class GameManager extends Component {
         // Call event to continue all game characters actions
     }
 
-    endGameState() {
+    quitGameState() {
+        mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP);
         mEventEmitter.instance.emit(CLayerEvent.DISABLE_ROOM);
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_LOBBY);
+    }
+
+    openSettingState() {
+        mEventEmitter.instance.emit(CLayerEvent.ENABLE_POPUP, EPopup.SETTING);
+    }
+
+    closeSettingState() {
+        mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP, EPopup.SETTING);
     }
 
     protected onDestroy(): void {
