@@ -170,7 +170,7 @@
     "_priority": 0,
     "_fov": 45,
     "_fovAxis": 0,
-    "_orthoHeight": 411.5668202764977,
+    "_orthoHeight": 506.1859582542694,
     "_near": 0,
     "_far": 1000,
     "_color": {
@@ -4982,7 +4982,14 @@
     "lobbyNode": {
       "__id__": 7
     },
-    "lobbyUINodes": [],
+    "lobbyUINodes": [
+      {
+        "__id__": 8
+      },
+      {
+        "__id__": 41
+      }
+    ],
     "buttonManager": null,
     "_id": "1dh+dlDadDXYRobX/6Oyva"
   },
@@ -5076,7 +5083,7 @@
         "__id__": 334
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 336
@@ -9771,8 +9778,8 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": null,
-      "y": null
+      "x": 0,
+      "y": 0
     },
     "_id": "6baUBlX0JFgIUWqCCQ/A1W"
   },
@@ -13618,7 +13625,11 @@
     "popupNode": {
       "__id__": 341
     },
-    "popupUINodes": [],
+    "popupUINodes": [
+      {
+        "__id__": 346
+      }
+    ],
     "buttonManager": null,
     "_id": "61Z0dhiAhJ7r3kQchUrUqP"
   },

@@ -5,5 +5,8 @@ const { ccclass, property } = _decorator;
 @ccclass('CharacterManager')
 export class CharacterManager extends Component {
 
+    @property(CharacterController)
     currentCharacter: CharacterController;
+
+
 }
