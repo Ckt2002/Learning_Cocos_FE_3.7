@@ -675,6 +675,7 @@
     "__prefab": {
       "__id__": 31
     },
+    "moveSpeed": 250,
     "_id": ""
   },
   {
@@ -721,6 +722,7 @@
     "__prefab": {
       "__id__": 35
     },
+    "moveSpeed": 200,
     "_id": ""
   },
   {
@@ -736,6 +738,7 @@
       "__id__": 0
     },
     "fileId": "f1FbGciTpG6KVs4m8nr19w",
+    "instance": null,
     "targetOverrides": null
   }
 ]

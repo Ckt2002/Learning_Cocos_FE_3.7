@@ -1,16 +1,16 @@
 import { _decorator, Enum, Node } from 'cc';
-import { EnemySpawn } from '../Spawn/EnemySpawn';
+import { EnemySpawnData } from '../Spawn/EnemySpawnData';
 import { PoolingController } from './PoolingController';
 import { EEnemyType } from '../Enum/EEnemyType';
 
 const { ccclass, property } = _decorator;
 
 @ccclass("EnemyPooling")
-export class EnemyPooling extends PoolingController<EnemySpawn> {
-    @property([EnemySpawn])
-    public prefabs: EnemySpawn[] = [];
+export class EnemyPooling extends PoolingController<EnemySpawnData> {
+    @property([EnemySpawnData])
+    public prefabs: EnemySpawnData[] = [];
 
-    protected getPrefabInformation(): EnemySpawn[] {
+    protected getPrefabInformation(): EnemySpawnData[] {
         return this.prefabs;
     }
 

@@ -1,10 +1,10 @@
 import { _decorator, Component, Enum, instantiate, Node } from 'cc';
-import { SpawnInformation } from '../Spawn/SpawnInformation';
+import { SpawnData } from '../Spawn/SpawnInformation';
 
 const { ccclass } = _decorator;
 
 @ccclass("PoolingController")
-export abstract class PoolingController<TInfo extends SpawnInformation> extends Component {
+export abstract class PoolingController<TInfo extends SpawnData> extends Component {
     private nodeMap: Map<number, Node[]>;
 
     protected onLoad(): void {

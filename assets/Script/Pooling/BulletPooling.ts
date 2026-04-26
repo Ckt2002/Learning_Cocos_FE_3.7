@@ -1,16 +1,16 @@
 import { _decorator, Node } from 'cc';
 import { PoolingController } from './PoolingController';
-import { BulletSpawn } from '../Spawn/BulletSpawn';
+import { BulletSpawnData } from '../Spawn/BulletSpawnData';
 import { EBulletType } from '../Enum/EBulletType';
 
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletPooling")
-export class BulletPooling extends PoolingController<BulletSpawn> {
-    @property([BulletSpawn])
-    public prefabs: BulletSpawn[] = [];
+export class BulletPooling extends PoolingController<BulletSpawnData> {
+    @property([BulletSpawnData])
+    public prefabs: BulletSpawnData[] = [];
 
-    protected getPrefabInformation(): BulletSpawn[] {
+    protected getPrefabInformation(): BulletSpawnData[] {
         return this.prefabs;
     }
 

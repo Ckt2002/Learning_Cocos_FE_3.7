@@ -19,7 +19,6 @@ export class CharacterController extends Component {
 
     @property({
         group: { name: "Limit" },
-        type: Vec2,
         visible: true,
     })
     public limitVertical: Vec2 = new Vec2();

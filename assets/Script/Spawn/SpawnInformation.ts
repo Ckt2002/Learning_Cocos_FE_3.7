@@ -2,8 +2,8 @@ import { _decorator, Prefab } from 'cc';
 
 const { ccclass, property } = _decorator;
 
-@ccclass("SpawnInformation")
-export abstract class SpawnInformation {
+@ccclass("SpawnData")
+export abstract class SpawnData {
     @property(Prefab)
     public prefab: Prefab = null;
 

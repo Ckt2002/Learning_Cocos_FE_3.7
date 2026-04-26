@@ -16,12 +16,12 @@ export class BulletManager extends Component {
 
     private bulletSpawnNode: Node = null;
     private currentBulletType: EBulletType = EBulletType.NORMAL;
-    private bulletPooling: BulletPooling = null;
+    private pooling: BulletPooling = null;
     public activatedBullets: BulletController[] = [];
 
     protected onLoad(): void {
         this.activatedBullets = [];
-        this.bulletPooling = this.node.getComponent(BulletPooling);
+        this.pooling = this.node.getComponent(BulletPooling);
         this.characterManager.node.on(CInputName.SHOOT, this.shoot.bind(this), this);
         this.bulletSpawnNode = this.characterManager.characterController.firePoint;
     }
@@ -31,7 +31,7 @@ export class BulletManager extends Component {
     }
 
     private shoot() {
-        const bullet = this.bulletPooling.getBullet(this.currentBulletType);
+        const bullet = this.pooling.getBullet(this.currentBulletType);
         bullet.setWorldPosition(this.bulletSpawnNode.getWorldPosition());
         bullet.active = true;
         this.activatedBullets.push(bullet.getComponent(BulletController));

@@ -41,6 +41,7 @@ export class CharacterManager extends Component {
         if (!this.validMove(currentPosition.y, this.characterController.limitVertical)) {
             return;
         }
+
         characterNode.setPosition(
             currentPosition.x,
             currentPosition.y + dt * this.characterController.moveSpeed * this.moveDirectionY

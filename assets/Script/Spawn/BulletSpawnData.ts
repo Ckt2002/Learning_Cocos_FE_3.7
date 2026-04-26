@@ -1,11 +1,11 @@
 import { _decorator, Enum } from 'cc';
-import { SpawnInformation } from './SpawnInformation';
+import { SpawnData } from './SpawnInformation';
 import { EBulletType } from '../Enum/EBulletType';
 
 const { ccclass, property } = _decorator;
 
-@ccclass("BulletSpawn")
-export class BulletSpawn extends SpawnInformation {
+@ccclass("BulletSpawnData")
+export class BulletSpawnData extends SpawnData {
     @property({ type: Enum(EBulletType) })
     public bulletType: EBulletType = EBulletType.NORMAL;
 

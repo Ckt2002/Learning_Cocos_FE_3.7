@@ -1,11 +1,11 @@
 import { _decorator, Enum, Prefab } from 'cc';
-import { SpawnInformation } from './SpawnInformation';
+import { SpawnData } from './SpawnInformation';
 import { EEnemyType } from '../Enum/EEnemyType';
 
 const { ccclass, property } = _decorator;
 
-@ccclass("EnemySpawn")
-export class EnemySpawn extends SpawnInformation {
+@ccclass("EnemySpawnData")
+export class EnemySpawnData extends SpawnData {
     @property({ type: Enum(EEnemyType) })
     public enemyType: EEnemyType = EEnemyType.WOLF;
 
