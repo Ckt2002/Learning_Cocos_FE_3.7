@@ -223,7 +223,7 @@
   {
     "__type__": "BulletConfig",
     "damage": 10,
-    "moveSpeed": 100
+    "moveSpeed": 200
   },
   {
     "__type__": "cc.PrefabInfo",

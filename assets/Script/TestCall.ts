@@ -1,7 +1,7 @@
 import { _decorator, Component, random } from "cc";
 import { Test } from "./Test";
 
-const { ccclass, property } = _decorator;
+const { ccclass } = _decorator;
 
 @ccclass("TestCall")
 export class TestCall extends Component {

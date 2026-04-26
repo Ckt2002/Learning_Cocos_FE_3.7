@@ -43,6 +43,6 @@ export abstract class PoolingController<TInfo extends SpawnInformation> extends 
         }
 
         this.spawn();
-        this.getNode(type);
+        return this.getNode(type);
     }
 }

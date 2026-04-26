@@ -8,6 +8,7 @@ export class Test extends Component implements ITest {
     test1(): void {
         console.log("Hello");
     }
+
     test2(): number {
         return Math.random() * (10 - 1) + 1;
     }
