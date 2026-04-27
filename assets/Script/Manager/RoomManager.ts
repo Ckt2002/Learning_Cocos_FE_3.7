@@ -15,19 +15,24 @@ export class RoomManager extends BaseLayerManager<void> {
     protected registerEvents(): void {
         mEventEmitter.instance.registerEvent(CLayerEvent.ENABLE_ROOM, this.enableContainer.bind(this), this);
         mEventEmitter.instance.registerEvent(CLayerEvent.DISABLE_ROOM, this.disableContainer.bind(this), this);
+        mEventEmitter.instance.registerEvent(CLayerEvent.INIT_ROOM, this.initRound.bind(this), this);
 
         super.registerEvents();
     }
 
     protected enableContainer(param?: void): void {
         super.enableContainer(param);
+        this.initRound();
+    }
+
+    private initRound() {
         this.node.emit(CRoundEvent.INIT_ROUND);
     }
 
     protected layerEventHandler(buttonEvent: EButtonEvent) {
         switch (buttonEvent) {
-            case EButtonEvent.PAUSE_GAME:
-                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.PAUSE_GAME);
+            case EButtonEvent.PAUSE_ROUND:
+                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.PAUSE_ROUND);
                 break;
 
             default:

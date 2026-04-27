@@ -738,6 +738,9 @@
     "healthBarController": {
       "__id__": 27
     },
+    "spriteUI": {
+      "__id__": 3
+    },
     "enemyType": 0,
     "_id": ""
   },

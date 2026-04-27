@@ -37,12 +37,16 @@ export class GameManager extends Component {
                 this.startRoundState(true);
                 break;
 
-            case EGameState.PAUSE_GAME:
+            case EGameState.PAUSE_ROUND:
                 this.pauseGameState(CLayerEvent.ENABLE_POPUP, true);
                 break;
 
-            case EGameState.RESUME_GAME:
+            case EGameState.RESUME_ROUND:
                 this.pauseGameState(CLayerEvent.DISABLE_POPUP, false);
+                break;
+
+            case EGameState.RESTART_ROUND:
+                this.restartRoundState();
                 break;
 
             case EGameState.QUIT_GAME:
@@ -84,6 +88,12 @@ export class GameManager extends Component {
     pauseGameState(layerEvent: string, isPausing: boolean) {
         GameManager.pauseGame = isPausing;
         mEventEmitter.instance.emit(layerEvent, EPopup.PAUSE_GAME);
+    }
+
+    restartRoundState() {
+        GameManager.pauseGame = true;
+        mEventEmitter.instance.emit(CLayerEvent.INIT_ROOM);
+        mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP);
     }
 
     quitGameState() {

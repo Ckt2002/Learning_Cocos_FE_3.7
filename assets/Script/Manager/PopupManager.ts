@@ -55,8 +55,8 @@ export class PopupManager extends BaseLayerManager<EPopup> {
     protected layerEventHandler(buttonEvent: EButtonEvent) {
         let gameState: EGameState = EGameState.CLOSE_SETTING;
         switch (buttonEvent) {
-            case EButtonEvent.RESUME_GAME:
-                gameState = EGameState.RESUME_GAME;
+            case EButtonEvent.RESUME_ROUND:
+                gameState = EGameState.RESUME_ROUND;
                 break;
 
             case EButtonEvent.OPEN_SETTING:
@@ -65,6 +65,10 @@ export class PopupManager extends BaseLayerManager<EPopup> {
 
             case EButtonEvent.CLOSE_SETTING:
                 gameState = EGameState.CLOSE_SETTING;
+                break;
+
+            case EButtonEvent.RESTART_ROUND:
+                gameState = EGameState.RESTART_ROUND;
                 break;
 
             case EButtonEvent.QUIT_GAME:

@@ -1,6 +1,5 @@
 import { _decorator, CCInteger, Component, Enum, Node } from "cc";
 import { EEnemyType } from "../Enum/EEnemyType";
-import { EnemyManager } from "./EnemyManager";
 import { CRoundEvent } from "../Constant/CRoundEvent";
 import { GameManager } from "./GameManager";
 
@@ -78,12 +77,19 @@ export class RoundManager extends Component {
 
     public init() {
         this.reset();
+        this.waitForSeconds(3);
+    }
+
+    private waitForSeconds(time: number) {
         setTimeout(() => {
             GameManager.pauseGame = false;
-        }, 5000);
+        }, time * 1000);
     }
 
     public reset() {
         this.gameDuration = 0;
+        for (const value of this.enemySpawnDurations) {
+            value[1].duration = 0;
+        }
     }
 }

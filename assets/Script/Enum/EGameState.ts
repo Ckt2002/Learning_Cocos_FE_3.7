@@ -1,9 +1,10 @@
 export enum EGameState {
     START_GAME = 0, // TO LOBBY
-    START_ROUND = 2, // TO ROOM
+    START_ROUND = 1, // TO ROOM
 
-    PAUSE_GAME = 3,
-    RESUME_GAME = 4,
+    PAUSE_ROUND = 2,
+    RESUME_ROUND = 3,
+    RESTART_ROUND = 4,
     QUIT_GAME = 5,
 
     OPEN_SETTING = 6,
