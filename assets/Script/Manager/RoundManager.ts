@@ -2,6 +2,7 @@ import { _decorator, CCInteger, Component, Enum, Node } from "cc";
 import { EEnemyType } from "../Enum/EEnemyType";
 import { EnemyManager } from "./EnemyManager";
 import { CRoundEvent } from "../Constant/CRoundEvent";
+import { GameManager } from "./GameManager";
 
 const { ccclass, property } = _decorator;
 
@@ -47,6 +48,9 @@ export class RoundManager extends Component {
     }
 
     protected update(dt: number): void {
+        if (GameManager.pauseGame) {
+            return;
+        }
         this.calculateRoundTime(dt);
         this.calculateSpawnTime(dt);
     }
@@ -54,8 +58,6 @@ export class RoundManager extends Component {
     private calculateRoundTime(dt: number) {
         this.gameDuration += dt;
         if (this.gameDuration >= this.gameTimeLimit) {
-            // Call end game state here
-            console.log("END ROUND STATE");
             return;
         }
     }

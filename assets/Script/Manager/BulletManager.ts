@@ -4,6 +4,9 @@ import { EBulletType } from '../Enum/EBulletType';
 import { BulletController } from '../Bullet/BulletController';
 import { CInputName } from '../Constant/CInputName';
 import { CharacterManager } from './CharacterManager';
+import { CRoundEvent } from '../Constant/CRoundEvent';
+import { EnemyManager } from './EnemyManager';
+import { GameManager } from './GameManager';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
@@ -23,6 +26,7 @@ export class BulletManager extends Component {
     private bulletTypes: EBulletType[] = [];
 
     private bulletSpawnNode: Node = null;
+    private enemyNode: Node = null;
     private currentBulletType: EBulletType = EBulletType.NORMAL;
     private pooling: BulletPooling = null;
     public activatedBullets: BulletController[] = [];
@@ -31,22 +35,32 @@ export class BulletManager extends Component {
         if (!BulletManager.instance) {
             BulletManager.instance = this;
         }
-
         this.activatedBullets = [];
         this.pooling = this.node.getComponent(BulletPooling);
         this.bulletSpawnNode = this.characterManager.characterController.firePoint;
+        this.registerEvents();
+    }
 
-        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
-        this.node.on(CInputName.SWITCH_BULLET, this.switchBullet, this);
+    protected start(): void {
+        this.enemyNode = EnemyManager.instance.node;
     }
 
     protected update(dt: number): void {
+        if (GameManager.pauseGame) {
+            return;
+        }
         this.controlBullets(dt);
     }
 
     protected onDestroy(): void {
-        this.characterManager.node.off(CInputName.SHOOT, this.shoot, this);
-        this.node.off(CInputName.SWITCH_BULLET, this.switchBullet);
+        this.characterManager.node.targetOff(this);
+        this.node.targetOff(this);
+    }
+
+    private registerEvents(): void {
+        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
+        this.node.on(CInputName.SWITCH_BULLET, this.switchBullet, this);
+        this.node.on(CRoundEvent.ENEMY_TAKE_DAMAGE, this.causeDamage, this);
     }
 
     private shoot() {
@@ -63,10 +77,13 @@ export class BulletManager extends Component {
                 this.activatedBullets.splice(index, 1);
                 continue;
             }
-
             const newPosition = bullet.node.position;
             bullet.node.setPosition(newPosition.x + bullet.bulletConfig.moveSpeed * dt, newPosition.y);
         }
+    }
+
+    private causeDamage(target: Node, damage: number) {
+        this.enemyNode.emit(CRoundEvent.ENEMY_TAKE_DAMAGE, target, damage);
     }
 
     private switchBullet() {
@@ -76,7 +93,6 @@ export class BulletManager extends Component {
         } else {
             currentIndex++;
         }
-
         this.currentBulletType = this.bulletTypes[currentIndex];
     }
 }

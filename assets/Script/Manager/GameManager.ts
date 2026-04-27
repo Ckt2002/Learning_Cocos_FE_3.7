@@ -8,6 +8,8 @@ const { ccclass } = _decorator;
 
 @ccclass('GameManager')
 export class GameManager extends Component {
+    public static pauseGame: boolean = false;
+
     protected onLoad(): void {
         mEventEmitter.instance = new mEventEmitter();
     }
@@ -61,20 +63,24 @@ export class GameManager extends Component {
     }
 
     initGameState() {
+        GameManager.pauseGame = false;
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_LOBBY);
     }
 
     startGameState() {
+        GameManager.pauseGame = false;
         mEventEmitter.instance.emit(CLayerEvent.DISABLE_LOBBY);
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_ROOM);
     }
 
     pauseGameState() {
+        GameManager.pauseGame = true;
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_POPUP, EPopup.PAUSE_GAME);
         // Call event to stop all game characters actions
     }
 
     resumeGameState() {
+        GameManager.pauseGame = false;
         mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP, EPopup.PAUSE_GAME);
         // Call event to continue all game characters actions
     }

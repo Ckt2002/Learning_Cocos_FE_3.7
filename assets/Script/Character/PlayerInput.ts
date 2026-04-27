@@ -1,5 +1,6 @@
 import { _decorator, Component, input, Input, EventKeyboard, KeyCode } from 'cc';
 import { CInputName } from '../Constant/CInputName';
+import { GameManager } from '../Manager/GameManager';
 
 const { ccclass } = _decorator;
 
@@ -16,6 +17,9 @@ export class PlayerInput extends Component {
     }
 
     onKeyDown(event: EventKeyboard) {
+        if (GameManager.pauseGame) {
+            return;
+        }
         switch (event.keyCode) {
             case KeyCode.KEY_W:
             case KeyCode.ARROW_UP:
@@ -41,6 +45,9 @@ export class PlayerInput extends Component {
     }
 
     onKeyUp(event: EventKeyboard) {
+        if (GameManager.pauseGame) {
+            return;
+        }
         switch (event.keyCode) {
             case KeyCode.KEY_W:
             case KeyCode.KEY_S:

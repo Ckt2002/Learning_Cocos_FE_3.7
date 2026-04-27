@@ -733,6 +733,11 @@
     },
     "moveSpeed": 200,
     "damage": 80,
+    "maxHealth": 300,
+    "currentHealth": 10,
+    "healthBarNode": {
+      "__id__": 8
+    },
     "_id": ""
   },
   {

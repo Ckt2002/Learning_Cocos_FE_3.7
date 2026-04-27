@@ -1,15 +1,17 @@
-import { _decorator, CCInteger, Component, Enum, random, Vec3 } from "cc";
+import { _decorator, CCInteger, Component, Enum, random, Vec3, Node } from "cc";
 import { EnemyController } from "../Enemy/EnemyController";
 import { SpawnPosManager } from "./SpawnPosManager";
 import { EnemyPooling } from "../Pooling/EnemyPooling";
 import { EEnemyType } from '../Enum/EEnemyType';
 import { CRoundEvent } from "../Constant/CRoundEvent";
+import { GameManager } from "./GameManager";
 
 const { ccclass, property } = _decorator;
 
 @ccclass("EnemyManager")
 export class EnemyManager extends Component {
     public static instance: EnemyManager = null;
+
     @property([EnemyController])
     private activatedEnemies: EnemyController[] = [];
 
@@ -25,7 +27,7 @@ export class EnemyManager extends Component {
         }
 
         this.pooling = this.node.getComponent(EnemyPooling);
-        this.node.on(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType, this);
+        this.registerEvents();
     }
 
     protected start(): void {
@@ -33,11 +35,19 @@ export class EnemyManager extends Component {
     }
 
     protected update(dt: number): void {
+        if (GameManager.pauseGame) {
+            return;
+        }
         this.controlEnemy(dt);
     }
 
     protected onDestroy(): void {
-        this.node.off(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType);
+        this.node.targetOff(this);
+    }
+
+    private registerEvents() {
+        this.node.on(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType, this);
+        this.node.on(CRoundEvent.ENEMY_TAKE_DAMAGE, this.takeDamage, this);
     }
 
     private controlEnemy(dt: number) {
@@ -67,5 +77,16 @@ export class EnemyManager extends Component {
         newEnemyNode.setWorldPosition(worldSpawnPosition);
         newEnemyNode.active = true;
         this.activatedEnemies.push(newEnemyNode.getComponent(EnemyController));
+    }
+
+    takeDamage(target: Node, damage: number) {
+        console.log('Taking damage:', target, damage);
+        for (let enemy of this.activatedEnemies) {
+            if (enemy.node !== target) {
+                continue;
+            }
+            enemy.takeDamage(damage);
+            return;
+        }
     }
 }
