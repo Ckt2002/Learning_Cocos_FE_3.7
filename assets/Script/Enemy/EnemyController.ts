@@ -8,7 +8,12 @@ export class EnemyController extends Component {
     @property({
         group: { name: "Stats" },
         type: CCInteger,
-        visible: true,
     })
     public moveSpeed: number = 200;
+
+    @property({
+        group: { name: "Stats" },
+        type: CCInteger,
+    })
+    public damage: number = 10;
 }

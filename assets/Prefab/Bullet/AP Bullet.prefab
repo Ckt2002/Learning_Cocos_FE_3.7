@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "Bullet",
+    "_name": "AP Bullet",
     "_objFlags": 0,
     "_native": "",
     "data": {
@@ -12,7 +12,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Bullet",
+    "_name": "AP Bullet",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -80,8 +80,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 56,
-      "height": 44
+      "width": 48,
+      "height": 48
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -116,7 +116,7 @@
       "a": 255
     },
     "_spriteFrame": {
-      "__uuid__": "6f980fd9-3262-4557-9a97-de49e4f0ca57@f9941",
+      "__uuid__": "1d24537a-8319-41b0-9874-81539b5113b3@f9941",
       "__expectedType__": "cc.SpriteFrame"
     },
     "_type": 0,
@@ -222,8 +222,8 @@
   },
   {
     "__type__": "BulletConfig",
-    "damage": 10,
-    "moveSpeed": 200
+    "damage": 50,
+    "moveSpeed": 300
   },
   {
     "__type__": "cc.PrefabInfo",

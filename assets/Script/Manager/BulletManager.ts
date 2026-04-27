@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Enum, Node, instantiate } from 'cc';
 import { BulletPooling } from '../Pooling/BulletPooling';
 import { EBulletType } from '../Enum/EBulletType';
 import { BulletController } from '../Bullet/BulletController';
@@ -8,11 +8,19 @@ const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
 export class BulletManager extends Component {
+    public static instance: BulletManager = null;
+
     @property({
         type: CharacterManager,
         visible: true,
     })
     private characterManager: CharacterManager = null;
+
+    @property({
+        type: [Enum(EBulletType)],
+        visible: true,
+    })
+    private bulletTypes: EBulletType[] = [];
 
     private bulletSpawnNode: Node = null;
     private currentBulletType: EBulletType = EBulletType.NORMAL;
@@ -20,14 +28,25 @@ export class BulletManager extends Component {
     public activatedBullets: BulletController[] = [];
 
     protected onLoad(): void {
+        if (!BulletManager.instance) {
+            BulletManager.instance = this;
+        }
+
         this.activatedBullets = [];
         this.pooling = this.node.getComponent(BulletPooling);
-        this.characterManager.node.on(CInputName.SHOOT, this.shoot.bind(this), this);
         this.bulletSpawnNode = this.characterManager.characterController.firePoint;
+
+        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
+        this.node.on(CInputName.SWITCH_BULLET, this.switchBullet, this);
     }
 
     protected update(dt: number): void {
         this.controlBullets(dt);
+    }
+
+    protected onDestroy(): void {
+        this.characterManager.node.off(CInputName.SHOOT, this.shoot, this);
+        this.node.off(CInputName.SWITCH_BULLET, this.switchBullet);
     }
 
     private shoot() {
@@ -48,5 +67,16 @@ export class BulletManager extends Component {
             const newPosition = bullet.node.position;
             bullet.node.setPosition(newPosition.x + bullet.bulletConfig.moveSpeed * dt, newPosition.y);
         }
+    }
+
+    private switchBullet() {
+        let currentIndex = this.bulletTypes.indexOf(this.currentBulletType);
+        if (currentIndex === this.bulletTypes.length - 1) {
+            currentIndex = 0;
+        } else {
+            currentIndex++;
+        }
+
+        this.currentBulletType = this.bulletTypes[currentIndex];
     }
 }

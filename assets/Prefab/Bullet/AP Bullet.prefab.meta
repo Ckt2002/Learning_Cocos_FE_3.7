@@ -2,12 +2,12 @@
   "ver": "1.1.43",
   "importer": "prefab",
   "imported": true,
-  "uuid": "5a875f1c-9ef2-4627-95b8-a57bc0ea1e06",
+  "uuid": "537af7bf-6fa3-410e-b43c-5083831d76de",
   "files": [
     ".json"
   ],
   "subMetas": {},
   "userData": {
-    "syncNodeName": "Bullet"
+    "syncNodeName": "AP Bullet"
   }
 }

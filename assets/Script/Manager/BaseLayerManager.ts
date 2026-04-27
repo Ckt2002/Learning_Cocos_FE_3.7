@@ -53,6 +53,5 @@ export abstract class BaseLayerManager<T> extends Component {
     }
 
     protected layerEventHandler(buttonEvent: EButtonEvent) {
-
     }
 }

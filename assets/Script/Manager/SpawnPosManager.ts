@@ -17,7 +17,7 @@ export class SpawnPosManager extends Component {
     }
 
     public getWorldSpawnPosition(): Vec3 {
-        const randomIndex = randomNumber(0, this.spawnPositions.length);
+        const randomIndex = randomNumber(0, this.spawnPositions.length - 1);
         return this.spawnPositions[randomIndex].worldPosition;
     }
 }

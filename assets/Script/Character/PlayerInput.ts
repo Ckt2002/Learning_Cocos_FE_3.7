@@ -32,7 +32,7 @@ export class PlayerInput extends Component {
                 break;
 
             case KeyCode.KEY_E:
-                console.log(CInputName.SWITCH_BULLET);
+                this.node.emit(CInputName.SWITCH_BULLET);
                 break;
 
             default:

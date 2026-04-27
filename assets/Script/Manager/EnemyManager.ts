@@ -2,27 +2,30 @@ import { _decorator, CCInteger, Component, Enum, random, Vec3 } from "cc";
 import { EnemyController } from "../Enemy/EnemyController";
 import { SpawnPosManager } from "./SpawnPosManager";
 import { EnemyPooling } from "../Pooling/EnemyPooling";
-import { EEnemyType } from "../Enum/EEnemyType";
-import { randomNumber } from "../Utils/Random";
+import { EEnemyType } from '../Enum/EEnemyType';
+import { CRoundEvent } from "../Constant/CRoundEvent";
 
 const { ccclass, property } = _decorator;
 
 @ccclass("EnemyManager")
 export class EnemyManager extends Component {
+    public static instance: EnemyManager = null;
     @property([EnemyController])
     private activatedEnemies: EnemyController[] = [];
-
-    @property({ type: [Enum(EEnemyType)] })
-    private enemyTypes: EEnemyType[] = [];
 
     @property(CCInteger)
     private moveDirection: number = -1;
 
     private pooling: EnemyPooling = null;
-    private getSpawnPosCallback: Function = null;
+    private getSpawnPosCallback: () => Vec3 = null;
 
     protected onLoad(): void {
+        if (!EnemyManager.instance) {
+            EnemyManager.instance = this;
+        }
+
         this.pooling = this.node.getComponent(EnemyPooling);
+        this.node.on(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType, this);
     }
 
     protected start(): void {
@@ -31,6 +34,10 @@ export class EnemyManager extends Component {
 
     protected update(dt: number): void {
         this.controlEnemy(dt);
+    }
+
+    protected onDestroy(): void {
+        this.node.off(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType);
     }
 
     private controlEnemy(dt: number) {
@@ -50,18 +57,13 @@ export class EnemyManager extends Component {
         }
     }
 
-    public spawnNormalEnemy() {
-        const randomIndex = randomNumber(0, this.enemyTypes.length - 2);
-        this.spawn(randomIndex);
+    public spawnEnemyByType(type: EEnemyType) {
+        this.spawn(type);
     }
 
-    public spawnBoss() {
-        this.spawn(this.enemyTypes.length - 1);
-    }
-
-    spawn(maxEnemyIndex: number) {
+    spawn(type: EEnemyType) {
         const worldSpawnPosition = this.getSpawnPosCallback();
-        const newEnemyNode = this.pooling.getEnemy(this.enemyTypes[maxEnemyIndex]);
+        const newEnemyNode = this.pooling.getEnemy(type);
         newEnemyNode.setWorldPosition(worldSpawnPosition);
         newEnemyNode.active = true;
         this.activatedEnemies.push(newEnemyNode.getComponent(EnemyController));

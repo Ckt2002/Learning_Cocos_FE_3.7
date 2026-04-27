@@ -1,5 +1,7 @@
-import { _decorator, CCInteger, Component, Enum } from "cc";
+import { _decorator, CCInteger, Component, Enum, Node } from "cc";
 import { EEnemyType } from "../Enum/EEnemyType";
+import { EnemyManager } from "./EnemyManager";
+import { CRoundEvent } from "../Constant/CRoundEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -21,24 +23,23 @@ export class RoundManager extends Component {
     public enemySpawnTimes: EnemySpawnTimeData[] = [];
 
     @property({
-        type: EnemySpawnTimeData,
-        visible: true,
-    })
-    public a: EnemySpawnTimeData = new EnemySpawnTimeData();
-
-    @property({
         type: CCInteger,
         visible: true,
     })
     private gameTimeLimit: number = 60; // second
 
     private gameDuration: number = 0;
+    private enemyNode: Node = null;
     private enemySpawnDurations: Map<EEnemyType, { duration: number, spawnTime: number }> = new Map();
 
     protected onLoad(): void {
         for (let data of this.enemySpawnTimes) {
             this.enemySpawnDurations.set(data.type, { duration: 0, spawnTime: data.spawnTime });
         }
+    }
+
+    protected start(): void {
+        this.enemyNode = EnemyManager.instance.node;
     }
 
     protected onEnable(): void {
@@ -53,19 +54,22 @@ export class RoundManager extends Component {
     private calculateRoundTime(dt: number) {
         this.gameDuration += dt;
         if (this.gameDuration >= this.gameTimeLimit) {
+            // Call end game state here
             console.log("END ROUND STATE");
             return;
         }
     }
 
     private calculateSpawnTime(dt: number) {
-        for (let time of this.enemySpawnDurations) {
-            if (time[1].duration >= time[1].spawnTime) {
-                // spawn
-                time[1].duration = 0;
+        for (let data of this.enemySpawnDurations) {
+            const type = data[0];
+            const time = data[1];
+            if (time.duration >= time.spawnTime) {
+                this.enemyNode.emit(CRoundEvent.SPAWN_ENEMY, type);
+                time.duration = 0;
                 continue;
             }
-            time[1].duration += dt;
+            time.duration += dt;
         }
     }
 }
