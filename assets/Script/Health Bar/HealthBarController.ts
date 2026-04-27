@@ -1,4 +1,4 @@
-import { _decorator, Component, ProgressBar, Node, tween, Vec3, UITransform } from "cc";
+import { _decorator, Component, ProgressBar, tween, UITransform } from "cc";
 import { CRoundEvent } from "../Constant/CRoundEvent";
 
 const { ccclass, property } = _decorator;
@@ -14,16 +14,8 @@ export class HealthBarController extends Component {
     @property(UITransform)
     private groundBar: UITransform = null;
 
-    protected onEnable(): void {
-        this.node.on(CRoundEvent.UPDATE_HEALTH_BAR, this.updateHealthBar, this);
-    }
-
     protected start(): void {
         this.updateHealthBar(1);
-    }
-
-    protected onDisable(): void {
-        this.node.off(CRoundEvent.UPDATE_HEALTH_BAR, this.updateHealthBar, this);
     }
 
     public updateHealthBar(value: number) {

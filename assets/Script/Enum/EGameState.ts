@@ -8,4 +8,7 @@ export enum EGameState {
 
     OPEN_SETTING = 6,
     CLOSE_SETTING = 7,
+
+    WIN_ROUND = 8,
+    LOSE_ROUND = 9,
 };

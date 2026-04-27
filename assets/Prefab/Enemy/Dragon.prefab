@@ -732,12 +732,13 @@
       "__id__": 35
     },
     "moveSpeed": 200,
-    "damage": 80,
+    "damage": 100,
     "maxHealth": 300,
     "currentHealth": 10,
-    "healthBarNode": {
-      "__id__": 8
+    "healthBarController": {
+      "__id__": 27
     },
+    "enemyType": 2,
     "_id": ""
   },
   {

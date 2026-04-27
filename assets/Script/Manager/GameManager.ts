@@ -34,15 +34,15 @@ export class GameManager extends Component {
                 break;
 
             case EGameState.START_ROUND:
-                this.startGameState()
+                this.startRoundState(true);
                 break;
 
             case EGameState.PAUSE_GAME:
-                this.pauseGameState();
+                this.pauseGameState(CLayerEvent.ENABLE_POPUP, true);
                 break;
 
             case EGameState.RESUME_GAME:
-                this.resumeGameState();
+                this.pauseGameState(CLayerEvent.DISABLE_POPUP, false);
                 break;
 
             case EGameState.QUIT_GAME:
@@ -50,11 +50,20 @@ export class GameManager extends Component {
                 break;
 
             case EGameState.OPEN_SETTING:
-                this.openSettingState();
+                this.settingState(CLayerEvent.ENABLE_POPUP);
                 break;
 
             case EGameState.CLOSE_SETTING:
-                this.closeSettingState();
+                this.settingState(CLayerEvent.DISABLE_POPUP);
+                break;
+
+            case EGameState.WIN_ROUND:
+                console.log("Handling win round");
+                this.endRoundState(EPopup.WIN);
+                break;
+
+            case EGameState.LOSE_ROUND:
+                this.endRoundState(EPopup.LOSE);
                 break;
 
             default:
@@ -63,26 +72,18 @@ export class GameManager extends Component {
     }
 
     initGameState() {
-        GameManager.pauseGame = false;
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_LOBBY);
     }
 
-    startGameState() {
-        GameManager.pauseGame = false;
+    startRoundState(isPausing: boolean) {
+        GameManager.pauseGame = isPausing;
         mEventEmitter.instance.emit(CLayerEvent.DISABLE_LOBBY);
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_ROOM);
     }
 
-    pauseGameState() {
-        GameManager.pauseGame = true;
-        mEventEmitter.instance.emit(CLayerEvent.ENABLE_POPUP, EPopup.PAUSE_GAME);
-        // Call event to stop all game characters actions
-    }
-
-    resumeGameState() {
-        GameManager.pauseGame = false;
-        mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP, EPopup.PAUSE_GAME);
-        // Call event to continue all game characters actions
+    pauseGameState(layerEvent: string, isPausing: boolean) {
+        GameManager.pauseGame = isPausing;
+        mEventEmitter.instance.emit(layerEvent, EPopup.PAUSE_GAME);
     }
 
     quitGameState() {
@@ -91,12 +92,13 @@ export class GameManager extends Component {
         mEventEmitter.instance.emit(CLayerEvent.ENABLE_LOBBY);
     }
 
-    openSettingState() {
-        mEventEmitter.instance.emit(CLayerEvent.ENABLE_POPUP, EPopup.SETTING);
+    endRoundState(popupType: EPopup) {
+        GameManager.pauseGame = true;
+        mEventEmitter.instance.emit(CLayerEvent.ENABLE_POPUP, popupType);
     }
 
-    closeSettingState() {
-        mEventEmitter.instance.emit(CLayerEvent.DISABLE_POPUP, EPopup.SETTING);
+    settingState(layerEvent: string) {
+        mEventEmitter.instance.emit(layerEvent, EPopup.SETTING);
     }
 
     protected onDestroy(): void {

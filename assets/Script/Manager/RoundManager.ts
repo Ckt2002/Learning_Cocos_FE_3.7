@@ -27,24 +27,21 @@ export class RoundManager extends Component {
         type: CCInteger,
         visible: true,
     })
-    private gameTimeLimit: number = 60; // second
+    private gameTimeLimit: number = 60;
+
+    @property(Node)
+    private enemyNode: Node = null;
 
     private gameDuration: number = 0;
-    private enemyNode: Node = null;
     private enemySpawnDurations: Map<EEnemyType, { duration: number, spawnTime: number }> = new Map();
 
     protected onLoad(): void {
         for (let data of this.enemySpawnTimes) {
             this.enemySpawnDurations.set(data.type, { duration: 0, spawnTime: data.spawnTime });
         }
-    }
 
-    protected start(): void {
-        this.enemyNode = EnemyManager.instance.node;
-    }
-
-    protected onEnable(): void {
-        this.gameDuration = 0;
+        this.node.on(CRoundEvent.INIT_ROUND, this.init, this);
+        this.node.on(CRoundEvent.RESET_ROUND, this.init, this);
     }
 
     protected update(dt: number): void {
@@ -53,6 +50,10 @@ export class RoundManager extends Component {
         }
         this.calculateRoundTime(dt);
         this.calculateSpawnTime(dt);
+    }
+
+    protected onDisable(): void {
+        this.node.targetOff(this);
     }
 
     private calculateRoundTime(dt: number) {
@@ -73,5 +74,16 @@ export class RoundManager extends Component {
             }
             time.duration += dt;
         }
+    }
+
+    public init() {
+        this.reset();
+        setTimeout(() => {
+            GameManager.pauseGame = false;
+        }, 5000);
+    }
+
+    public reset() {
+        this.gameDuration = 0;
     }
 }

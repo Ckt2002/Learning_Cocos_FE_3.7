@@ -1,5 +1,5 @@
-import { _decorator, CCFloat, CCInteger, Component, Node, Vec2, ViewGroup } from 'cc';
-import { CRoundEvent } from '../Constant/CRoundEvent';
+import { _decorator, CCFloat, CCInteger, Component, Node, Vec2 } from 'cc';
+import { HealthBarController } from '../Health Bar/HealthBarController';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterController')
@@ -34,26 +34,26 @@ export class CharacterController extends Component {
     @property(Node)
     public firePoint: Node = null;
 
-    @property(Node)
-    private healthBarNode: Node = null;
+    @property(HealthBarController)
+    private healthBarController: HealthBarController = null;
 
     private currentHealth = 0;
 
-    protected onEnable(): void {
-        this.currentHealth = this.maxHealth;
-        this.updateCurrentHealth(0);
-    }
-
-    public takeDamage(value: number) {
+    public takeDamage(value: number): boolean {
         this.updateCurrentHealth(-value);
         if (this.currentHealth <= 0) {
-            console.log("Die");
-            // Call event to character manager -> send to round -> end -> show popup.
+            // Wait for run animation die
         }
+        return this.currentHealth > 0;
     }
 
     public updateCurrentHealth(value: number) {
         this.currentHealth += value;
-        this.healthBarNode.emit(CRoundEvent.UPDATE_HEALTH_BAR, this.currentHealth / this.maxHealth);
+        this.healthBarController.updateHealthBar(this.currentHealth / this.maxHealth);
+    }
+
+    public reset() {
+        this.currentHealth = this.maxHealth;
+        this.healthBarController.updateHealthBar(this.currentHealth / this.maxHealth);
     }
 }

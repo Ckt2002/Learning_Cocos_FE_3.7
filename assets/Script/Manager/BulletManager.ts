@@ -1,4 +1,4 @@
-import { _decorator, Component, Enum, Node, instantiate } from 'cc';
+import { _decorator, Component, Enum, Node } from 'cc';
 import { BulletPooling } from '../Pooling/BulletPooling';
 import { EBulletType } from '../Enum/EBulletType';
 import { BulletController } from '../Bullet/BulletController';
@@ -7,6 +7,7 @@ import { CharacterManager } from './CharacterManager';
 import { CRoundEvent } from '../Constant/CRoundEvent';
 import { EnemyManager } from './EnemyManager';
 import { GameManager } from './GameManager';
+import { RoomManager } from './RoomManager';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
@@ -25,11 +26,14 @@ export class BulletManager extends Component {
     })
     private bulletTypes: EBulletType[] = [];
 
+    @property(RoomManager)
+    roomManager: RoomManager;
+
     private bulletSpawnNode: Node = null;
     private enemyNode: Node = null;
     private currentBulletType: EBulletType = EBulletType.NORMAL;
     private pooling: BulletPooling = null;
-    public activatedBullets: BulletController[] = [];
+    private activatedBullets: BulletController[] = [];
 
     protected onLoad(): void {
         if (!BulletManager.instance) {
@@ -52,15 +56,25 @@ export class BulletManager extends Component {
         this.controlBullets(dt);
     }
 
-    protected onDestroy(): void {
-        this.characterManager.node.targetOff(this);
+    protected onDisable(): void {
+        this.reset();
+        this.removeEvents();
+    }
+
+    private removeEvents() {
         this.node.targetOff(this);
+        this.characterManager.node.targetOff(this);
+        this.roomManager.node.targetOff(this);
     }
 
     private registerEvents(): void {
-        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
         this.node.on(CInputName.SWITCH_BULLET, this.switchBullet, this);
         this.node.on(CRoundEvent.ENEMY_TAKE_DAMAGE, this.causeDamage, this);
+
+        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
+
+        this.roomManager.node.on(CRoundEvent.INIT_ROUND, this.reset, this);
+        this.roomManager.node.on(CRoundEvent.RESET_ROUND, this.reset, this);
     }
 
     private shoot() {
@@ -94,5 +108,13 @@ export class BulletManager extends Component {
             currentIndex++;
         }
         this.currentBulletType = this.bulletTypes[currentIndex];
+    }
+
+    public reset() {
+        this.currentBulletType = EBulletType.NORMAL;
+        for (let bullet of this.activatedBullets) {
+            bullet.node.active = false;
+        }
+        this.activatedBullets = [];
     }
 }

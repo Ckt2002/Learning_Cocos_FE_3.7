@@ -735,9 +735,10 @@
     "damage": 30,
     "maxHealth": 150,
     "currentHealth": 10,
-    "healthBarNode": {
-      "__id__": 8
+    "healthBarController": {
+      "__id__": 27
     },
+    "enemyType": 1,
     "_id": ""
   },
   {
