@@ -1,11 +1,12 @@
 import { _decorator, Component, Node, Vec2 } from 'cc';
 import { CharacterController } from '../Character/CharacterController';
 import { CInputName } from '../Constant/CInputName';
-import { BulletManager } from './BulletManager';
 import { CRoundEvent } from '../Constant/CRoundEvent';
 import { GameManager } from './GameManager';
 import { RoomManager } from './RoomManager';
 import { ERoundStatus } from '../Enum/ERoundStatus';
+import { CharacterAnimation } from '../Character/CharacterAnimation';
+import { CAnimationName } from '../Constant/CAnimationName';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterManager')
@@ -13,13 +14,19 @@ export class CharacterManager extends Component {
     public static instance: CharacterManager = null;
 
     @property(CharacterController)
-    characterController: CharacterController;
+    characterController: CharacterController = null;
+
+    @property(CharacterAnimation)
+    characterAnimation: CharacterAnimation = null;
 
     @property(RoomManager)
-    roomManager: RoomManager;
+    roomManager: RoomManager = null;
+
+    @property(Node)
+    bulletManagerNode: Node = null;
 
     private moveDirectionY: number = 0;
-    private bulletNode: Node = null;
+    private isAlive: boolean = true;
 
     protected onLoad(): void {
         if (!CharacterManager.instance) {
@@ -28,7 +35,6 @@ export class CharacterManager extends Component {
     }
 
     protected start(): void {
-        this.bulletNode = BulletManager.instance.node;
         this.registerEvents();
         this.reset();
     }
@@ -65,15 +71,22 @@ export class CharacterManager extends Component {
     }
 
     private move(dt: number): void {
+        if (!this.isAlive) {
+            return;
+        }
         if (!this.characterController || this.moveDirectionY === 0) {
+            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
             return;
         }
 
         const characterNode = this.characterController.node;
         const currentPosition = characterNode.position;
         if (!this.checkValidMove(currentPosition.y, this.characterController.limitVertical)) {
+            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
             return;
         }
+
+        this.characterAnimation.setAnimation(0, CAnimationName.RUN, true);
 
         characterNode.setPosition(
             currentPosition.x,
@@ -82,7 +95,7 @@ export class CharacterManager extends Component {
     }
 
     private onSwitchBullet(): void {
-        this.bulletNode.emit(CInputName.SWITCH_BULLET);
+        this.bulletManagerNode.emit(CInputName.SWITCH_BULLET);
     }
 
     private checkValidMove(currentPositionY: number, limit: Vec2): boolean {
@@ -91,14 +104,19 @@ export class CharacterManager extends Component {
     }
 
     private takeDamage(value: number): void {
-        const isAlive = this.characterController.takeDamage(value);
-        if (isAlive) {
+        this.isAlive = this.characterController.takeDamage(value);
+        if (this.isAlive) {
             return;
         }
-        this.roomManager.endRound(ERoundStatus.LOSE);
+        this.characterAnimation.setAnimation(0, CAnimationName.DEATH, false);
+        setTimeout(() => {
+            this.roomManager.endRound(ERoundStatus.LOSE);
+        }, 3000);
     }
 
     public reset() {
         this.characterController.reset();
+        this.characterAnimation.setAnimation(0, CAnimationName.PORTAL, false);
+        this.characterAnimation.changeAnimation(0, CAnimationName.IDLE, 0, true);
     }
 }

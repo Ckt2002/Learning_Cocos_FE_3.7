@@ -4,4 +4,4 @@ export const CInputName = {
     STOP_MOVING: "STOP_MOVING",
     SHOOT: "SHOOT",
     SWITCH_BULLET: "SWITCH_BULLET",
-}
+} as const;

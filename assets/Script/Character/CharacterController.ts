@@ -1,5 +1,6 @@
-import { _decorator, CCFloat, CCInteger, Component, Node, Vec2 } from 'cc';
+import { _decorator, animation, CCFloat, CCInteger, Component, Node, sp, Vec2 } from 'cc';
 import { HealthBarController } from '../Health Bar/HealthBarController';
+
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterController')
@@ -41,9 +42,6 @@ export class CharacterController extends Component {
 
     public takeDamage(value: number): boolean {
         this.updateCurrentHealth(-value);
-        if (this.currentHealth <= 0) {
-            // Wait for run animation die
-        }
         return this.currentHealth > 0;
     }
 

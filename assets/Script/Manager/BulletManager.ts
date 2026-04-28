@@ -8,6 +8,8 @@ import { CRoundEvent } from '../Constant/CRoundEvent';
 import { EnemyManager } from './EnemyManager';
 import { GameManager } from './GameManager';
 import { RoomManager } from './RoomManager';
+import { CharacterAnimation } from '../Character/CharacterAnimation';
+import { CAnimationName } from '../Constant/CAnimationName';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
@@ -27,13 +29,18 @@ export class BulletManager extends Component {
     private bulletTypes: EBulletType[] = [];
 
     @property(RoomManager)
-    roomManager: RoomManager;
+    roomManager: RoomManager = null;
+
+    @property(CharacterAnimation)
+    characterAnimation: CharacterAnimation = null;
 
     private bulletSpawnNode: Node = null;
     private enemyNode: Node = null;
     private currentBulletType: EBulletType = EBulletType.NORMAL;
     private pooling: BulletPooling = null;
     private activatedBullets: BulletController[] = [];
+    private fireRate: number = 1;
+    private fireCoolDown: number = 0;
 
     protected onLoad(): void {
         if (!BulletManager.instance) {
@@ -42,6 +49,8 @@ export class BulletManager extends Component {
         this.activatedBullets = [];
         this.pooling = this.node.getComponent(BulletPooling);
         this.bulletSpawnNode = this.characterManager.characterController.firePoint;
+        this.fireRate = this.characterManager.characterController.fireRate;
+        this.fireCoolDown = this.fireRate;
         this.registerEvents();
     }
 
@@ -53,6 +62,7 @@ export class BulletManager extends Component {
         if (GameManager.pauseGame) {
             return;
         }
+        this.fireCoolDown += dt;
         this.controlBullets(dt);
     }
 
@@ -78,10 +88,15 @@ export class BulletManager extends Component {
     }
 
     private shoot() {
+        if (this.fireCoolDown < this.fireRate) {
+            return;
+        }
+        this.fireCoolDown = 0;
         const bullet = this.pooling.getBullet(this.currentBulletType);
         bullet.setWorldPosition(this.bulletSpawnNode.getWorldPosition());
         bullet.active = true;
         this.activatedBullets.push(bullet.getComponent(BulletController));
+        this.characterAnimation.setAnimationOne(1, CAnimationName.SHOOT);
     }
 
     private controlBullets(dt: number) {
@@ -116,5 +131,6 @@ export class BulletManager extends Component {
             bullet.node.active = false;
         }
         this.activatedBullets = [];
+        this.fireCoolDown = this.fireRate;
     }
 }

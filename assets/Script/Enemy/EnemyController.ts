@@ -76,8 +76,6 @@ export class EnemyController extends Component {
     private runAnimation() {
         if (this.originalSpriteWidth <= 2) {
             this.originalSpriteWidth = this.spriteUI.contentSize.width;
-
-            console.log(this.originalSpriteWidth);
             if (this.originalSpriteWidth <= 2) return;
         }
         const targetWidth = this.originalSpriteWidth * 1.2;
