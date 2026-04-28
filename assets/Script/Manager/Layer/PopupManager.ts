@@ -1,12 +1,11 @@
-import { _decorator, Component, Node, animation } from 'cc';
+import { _decorator, Component, Node } from 'cc';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { CLayerEvent } from '../../Constant/CLayerEvent';
 import { EPopup } from '../../Enum/EPopup';
 import { EButtonEvent } from '../../Enum/EButtonEvent';
-import { CGameEvent } from '../../Constant/CGameEvent';
-import { EGameState } from '../../Enum/EGameState';
-import { BaseLayerManager } from '../BaseLayerManager';
 import { ButtonManager } from './ButtonManager';
+import { ERoundStatus } from '../../Enum/ERoundStatus';
+import { EGameState } from '../../Enum/EGameState';
+import { CGameEvent } from '../../Constant/CGameEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass("PopupManager")
@@ -59,10 +58,18 @@ export class PopupManager extends Component {
         }
     }
 
+    private hideAllPopups() {
+        for (let popup of this.activatedNodes) {
+            popup.active = false;
+        }
+        this.activatedNodes = [];
+        this.container.active = false;
+    }
+
     protected handleButtonEvents(buttonEvent: EButtonEvent) {
-        let gameState: EGameState = EGameState.CLOSE_SETTING;
         switch (buttonEvent) {
-            case EButtonEvent.RESUME_ROUND:
+            case EButtonEvent.RESUME:
+                mEventEmitter.instance.emit(ERoundStatus.RESUME);
                 this.hidePopup(EPopup.PAUSE);
                 break;
 
@@ -74,12 +81,14 @@ export class PopupManager extends Component {
                 this.hidePopup(EPopup.SETTING);
                 break;
 
-            // case EButtonEvent.RESTART_ROUND:
-            //     gameState = EGameState.RESTART_ROUND;
-            //     break;
+            case EButtonEvent.RESTART:
+                mEventEmitter.instance.emit(ERoundStatus.RESTART);
+                this.hideAllPopups();
+                break;
 
-            case EButtonEvent.QUIT_GAME:
-                console.log("Quit game");
+            case EButtonEvent.QUIT:
+                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.QUIT_ROUND);
+                this.hideAllPopups();
                 break;
 
             default:

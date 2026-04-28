@@ -26,12 +26,11 @@ export class HomeManager extends Component {
     protected handleButtonEvents(buttonEvent: EButtonEvent) {
         switch (buttonEvent) {
             case EButtonEvent.OPEN_INVENTORY:
-                console.log(this.homeUINodes[0]);
                 this.homeUINodes[0].active = false;
                 this.homeUINodes[1].active = true;
                 break;
 
-            case EButtonEvent.START_ROUND:
+            case EButtonEvent.START:
                 mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.START_ROUND);
                 break;
 

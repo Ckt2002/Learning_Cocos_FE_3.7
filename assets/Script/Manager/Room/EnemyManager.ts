@@ -6,6 +6,7 @@ import { EEnemyType } from '../../Enum/EEnemyType';
 import { CRoundEvent } from "../../Constant/CRoundEvent";
 import { GameManager } from "../GameManager";
 import { RoomManager } from "../Layer/RoomManager";
+import { ERoundStatus } from "../../Enum/ERoundStatus";
 
 const { ccclass, property } = _decorator;
 
@@ -52,6 +53,7 @@ export class EnemyManager extends Component {
     protected onDestroy(): void {
         this.node.targetOff(this);
         this.roomManager.node.targetOff(this);
+        EnemyManager.instance = null;
     }
 
     private registerEvents(): void {
@@ -98,7 +100,7 @@ export class EnemyManager extends Component {
             const bossDefeated = enemy.takeDamage(damage);
             if (bossDefeated) {
                 GameManager.pauseGame = true;
-                // this.roomManager.endRound(ERoundStatus.WIN);
+                this.roomManager.endRound(ERoundStatus.WIN);
             }
             return;
         }

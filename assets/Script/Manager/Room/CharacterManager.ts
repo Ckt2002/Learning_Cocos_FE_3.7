@@ -27,6 +27,7 @@ export class CharacterManager extends Component {
 
     private moveDirectionY: number = 0;
     private isAlive: boolean = true;
+    private timeOutObject: any = null;
 
     protected onLoad(): void {
         if (!CharacterManager.instance) {
@@ -53,6 +54,11 @@ export class CharacterManager extends Component {
     protected onDestroy(): void {
         this.node.targetOff(this);
         this.roomManager.node.targetOff(this);
+        if (this.timeOutObject) {
+            clearTimeout(this.timeOutObject);
+            this.timeOutObject = null;
+        }
+        CharacterManager.instance = null;
     }
 
     private registerEvents(): void {
@@ -109,14 +115,19 @@ export class CharacterManager extends Component {
             return;
         }
         this.characterAnimation.setAnimation(0, CAnimationName.DEATH, false);
-        setTimeout(() => {
-            // this.roomManager.endRound(ERoundStatus.LOSE);
+        this.timeOutObject = setTimeout(() => {
+            this.roomManager.endRound(ERoundStatus.LOSE);
         }, 3000);
     }
 
     public reset() {
+        this.isAlive = true;
         this.characterController.reset();
         this.characterAnimation.setAnimation(0, CAnimationName.PORTAL, false);
         this.characterAnimation.changeAnimation(0, CAnimationName.IDLE, 0, true);
+        if (this.timeOutObject) {
+            clearTimeout(this.timeOutObject);
+            this.timeOutObject = null;
+        }
     }
 }

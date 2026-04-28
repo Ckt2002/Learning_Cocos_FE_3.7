@@ -65,6 +65,10 @@ export class BulletManager extends Component {
         this.removeEvents();
     }
 
+    protected onDestroy(): void {
+        BulletManager.instance = null;
+    }
+
     private removeEvents() {
         this.node.targetOff(this);
         this.characterManager.node.targetOff(this);

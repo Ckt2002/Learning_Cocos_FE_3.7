@@ -1,4 +1,4 @@
-import { _decorator, CCInteger, Component, Enum, Node } from "cc";
+import { _decorator, CCInteger, Component, Enum, Game, Node } from "cc";
 import { EEnemyType } from "../../Enum/EEnemyType";
 import { CRoundEvent } from "../../Constant/CRoundEvent";
 import { GameManager } from "../GameManager";
@@ -27,6 +27,7 @@ export class RoundManager extends Component {
 
     private gameDuration: number = 0;
     private enemySpawnDurations: Map<EEnemyType, { duration: number, spawnTime: number }> = new Map();
+    private timeOutObject: any = null;
 
     protected onLoad(): void {
         for (let data of this.enemySpawnTimes) {
@@ -35,7 +36,8 @@ export class RoundManager extends Component {
 
         this.node.on(CRoundEvent.INIT_ROUND, this.init, this);
         this.node.on(CRoundEvent.RESET_ROUND, this.init, this);
-        this.node.on('PAUSE_ROUND', this.pause, this);
+        this.node.on('PAUSE', this.pause, this);
+        this.node.on('RESUME', this.resume, this);
     }
 
     protected update(dt: number): void {
@@ -48,6 +50,10 @@ export class RoundManager extends Component {
 
     onDestroy() {
         this.node.targetOff(this);
+        if (this.timeOutObject) {
+            clearTimeout(this.timeOutObject);
+            this.timeOutObject = null;
+        }
     }
 
     private calculateRoundTime(dt: number) {
@@ -76,7 +82,7 @@ export class RoundManager extends Component {
     }
 
     private waitForSeconds(time: number) {
-        setTimeout(() => {
+        this.timeOutObject = setTimeout(() => {
             GameManager.pauseGame = false;
         }, time * 1000);
     }
@@ -91,5 +97,9 @@ export class RoundManager extends Component {
 
     private pause() {
         GameManager.pauseGame = true;
+    }
+
+    private resume() {
+        GameManager.pauseGame = false;
     }
 }

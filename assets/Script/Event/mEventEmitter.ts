@@ -30,8 +30,8 @@ export class mEventEmitter {
         this.eventTarget.emit(eventName, ...args);
     }
 
-    public removeEvent(eventName: string | number, method: any, target: any): void {
-        this.eventTarget.off(eventName, method, target);
+    public removeEvent(eventName: string | number, method: any): void {
+        this.eventTarget.off(eventName, method);
     }
 
     public removeAllOwnerEvents(owner: any): void {
@@ -41,7 +41,7 @@ export class mEventEmitter {
 
         const listenerArray = this.listenerMap.get(owner);
         for (let listener of listenerArray) {
-            this.removeEvent(listener.eventName, listener.method, owner);
+            this.removeEvent(listener.eventName, listener.method);
         }
         this.listenerMap.delete(owner);
     }
