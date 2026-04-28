@@ -1,7 +1,7 @@
 import { _decorator, CCInteger, Component, Enum, Node } from "cc";
-import { EEnemyType } from "../Enum/EEnemyType";
-import { CRoundEvent } from "../Constant/CRoundEvent";
-import { GameManager } from "./GameManager";
+import { EEnemyType } from "../../Enum/EEnemyType";
+import { CRoundEvent } from "../../Constant/CRoundEvent";
+import { GameManager } from "../GameManager";
 
 const { ccclass, property } = _decorator;
 
@@ -35,6 +35,7 @@ export class RoundManager extends Component {
 
         this.node.on(CRoundEvent.INIT_ROUND, this.init, this);
         this.node.on(CRoundEvent.RESET_ROUND, this.init, this);
+        this.node.on('PAUSE_ROUND', this.pause, this);
     }
 
     protected update(dt: number): void {
@@ -45,7 +46,7 @@ export class RoundManager extends Component {
         this.calculateSpawnTime(dt);
     }
 
-    protected onDisable(): void {
+    onDestroy() {
         this.node.targetOff(this);
     }
 
@@ -85,5 +86,10 @@ export class RoundManager extends Component {
         for (const value of this.enemySpawnDurations) {
             value[1].duration = 0;
         }
+        GameManager.pauseGame = true;
+    }
+
+    private pause() {
+        GameManager.pauseGame = true;
     }
 }

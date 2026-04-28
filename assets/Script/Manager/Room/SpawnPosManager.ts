@@ -1,5 +1,5 @@
 import { _decorator, Component, Node, Vec3 } from "cc";
-import { randomNumber } from "../Utils/Random";
+import { randomNumber } from "../../Utils/Random";
 
 const { ccclass, property } = _decorator;
 

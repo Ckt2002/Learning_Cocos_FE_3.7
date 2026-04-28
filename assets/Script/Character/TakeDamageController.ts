@@ -1,5 +1,5 @@
 import { _decorator, Collider2D, Component, Contact2DType, IPhysics2DContact, Node } from "cc";
-import { CharacterManager } from "../Manager/CharacterManager";
+import { CharacterManager } from "../Manager/Room/CharacterManager";
 import { CRoundEvent } from "../Constant/CRoundEvent";
 import { EnemyController } from "../Enemy/EnemyController";
 

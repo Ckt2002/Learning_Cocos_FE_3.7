@@ -1,6 +1,6 @@
 export enum EButtonEvent {
     MAIN = 0,
-    INVENTORY = 1,
+    OPEN_INVENTORY = 1,
 
     START_ROUND = 3,
     PAUSE_ROUND = 4,

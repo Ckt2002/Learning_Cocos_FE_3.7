@@ -5,7 +5,7 @@ export enum EGameState {
     PAUSE_ROUND = 2,
     RESUME_ROUND = 3,
     RESTART_ROUND = 4,
-    QUIT_GAME = 5,
+    QUIT_ROUND = 5,
 
     OPEN_SETTING = 6,
     CLOSE_SETTING = 7,

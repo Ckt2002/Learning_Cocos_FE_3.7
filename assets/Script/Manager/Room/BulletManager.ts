@@ -1,15 +1,15 @@
 import { _decorator, Component, Enum, Node } from 'cc';
-import { BulletPooling } from '../Pooling/BulletPooling';
-import { EBulletType } from '../Enum/EBulletType';
-import { BulletController } from '../Bullet/BulletController';
-import { CInputName } from '../Constant/CInputName';
 import { CharacterManager } from './CharacterManager';
-import { CRoundEvent } from '../Constant/CRoundEvent';
+import { EBulletType } from '../../Enum/EBulletType';
+import { RoomManager } from '../Layer/RoomManager';
+import { CharacterAnimation } from '../../Character/CharacterAnimation';
+import { BulletPooling } from '../../Pooling/BulletPooling';
+import { BulletController } from '../../Bullet/BulletController';
 import { EnemyManager } from './EnemyManager';
-import { GameManager } from './GameManager';
-import { RoomManager } from './RoomManager';
-import { CharacterAnimation } from '../Character/CharacterAnimation';
-import { CAnimationName } from '../Constant/CAnimationName';
+import { GameManager } from '../GameManager';
+import { CInputName } from '../../Constant/CInputName';
+import { CRoundEvent } from '../../Constant/CRoundEvent';
+import { CAnimationName } from '../../Constant/CAnimationName';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")

@@ -1,12 +1,11 @@
 import { _decorator, CCInteger, Component, Vec3, Node } from "cc";
-import { EnemyController } from "../Enemy/EnemyController";
+import { EnemyController } from "../../Enemy/EnemyController";
 import { SpawnPosManager } from "./SpawnPosManager";
-import { EnemyPooling } from "../Pooling/EnemyPooling";
-import { EEnemyType } from '../Enum/EEnemyType';
-import { CRoundEvent } from "../Constant/CRoundEvent";
-import { GameManager } from "./GameManager";
-import { RoomManager } from "./RoomManager";
-import { ERoundStatus } from "../Enum/ERoundStatus";
+import { EnemyPooling } from "../../Pooling/EnemyPooling";
+import { EEnemyType } from '../../Enum/EEnemyType';
+import { CRoundEvent } from "../../Constant/CRoundEvent";
+import { GameManager } from "../GameManager";
+import { RoomManager } from "../Layer/RoomManager";
 
 const { ccclass, property } = _decorator;
 
@@ -99,7 +98,7 @@ export class EnemyManager extends Component {
             const bossDefeated = enemy.takeDamage(damage);
             if (bossDefeated) {
                 GameManager.pauseGame = true;
-                this.roomManager.endRound(ERoundStatus.WIN);
+                // this.roomManager.endRound(ERoundStatus.WIN);
             }
             return;
         }

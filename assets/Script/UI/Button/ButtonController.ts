@@ -1,4 +1,4 @@
-import { _decorator, Button, Component, Enum, EventHandler, Node } from 'cc';
+import { _decorator, Component, Enum, Node } from 'cc';
 import { EButtonEvent } from '../../Enum/EButtonEvent';
 const { ccclass, property } = _decorator;
 
@@ -10,7 +10,7 @@ export class ButtonController extends Component {
     @property({ visible: false })
     private targetNode: Node = null;
 
-    public setupEvent(targetNode: Node) {
+    public setupTargetNode(targetNode: Node) {
         this.targetNode = targetNode;
     }
 

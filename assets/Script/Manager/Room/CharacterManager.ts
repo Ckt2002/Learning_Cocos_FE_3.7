@@ -1,12 +1,12 @@
 import { _decorator, Component, Node, Vec2 } from 'cc';
-import { CharacterController } from '../Character/CharacterController';
-import { CInputName } from '../Constant/CInputName';
-import { CRoundEvent } from '../Constant/CRoundEvent';
-import { GameManager } from './GameManager';
-import { RoomManager } from './RoomManager';
-import { ERoundStatus } from '../Enum/ERoundStatus';
-import { CharacterAnimation } from '../Character/CharacterAnimation';
-import { CAnimationName } from '../Constant/CAnimationName';
+import { CharacterController } from '../../Character/CharacterController';
+import { CInputName } from '../../Constant/CInputName';
+import { CRoundEvent } from '../../Constant/CRoundEvent';
+import { GameManager } from '../GameManager';
+import { RoomManager } from '../Layer/RoomManager';
+import { ERoundStatus } from '../../Enum/ERoundStatus';
+import { CharacterAnimation } from '../../Character/CharacterAnimation';
+import { CAnimationName } from '../../Constant/CAnimationName';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterManager')
@@ -110,7 +110,7 @@ export class CharacterManager extends Component {
         }
         this.characterAnimation.setAnimation(0, CAnimationName.DEATH, false);
         setTimeout(() => {
-            this.roomManager.endRound(ERoundStatus.LOSE);
+            // this.roomManager.endRound(ERoundStatus.LOSE);
         }, 3000);
     }
 
