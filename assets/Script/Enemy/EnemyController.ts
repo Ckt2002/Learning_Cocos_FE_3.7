@@ -8,28 +8,16 @@ const { ccclass, property } = _decorator;
 @ccclass("EnemyController")
 export class EnemyController extends Component {
 
-    @property({
-        group: { name: "Stats" },
-        type: CCInteger,
-    })
+    @property({ group: { name: "Stats" }, type: CCInteger })
     public moveSpeed: number = 200;
 
-    @property({
-        group: { name: "Stats" },
-        type: CCInteger,
-    })
+    @property({ group: { name: "Stats" }, type: CCInteger })
     public damage: number = 10;
 
-    @property({
-        group: { name: "Stats" },
-        type: CCInteger,
-    })
+    @property({ group: { name: "Stats" }, type: CCInteger })
     public maxHealth: number = 10;
 
-    @property({
-        group: { name: "Stats" },
-        type: CCInteger,
-    })
+    @property({ group: { name: "Stats" }, type: CCInteger })
     public currentHealth: number = 10;
 
     @property(HealthBarController)

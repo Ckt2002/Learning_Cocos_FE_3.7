@@ -16,16 +16,10 @@ const { ccclass, property } = _decorator;
 export class BulletManager extends Component {
     public static instance: BulletManager = null;
 
-    @property({
-        type: CharacterManager,
-        visible: true,
-    })
+    @property({ type: CharacterManager, visible: true })
     private characterManager: CharacterManager = null;
 
-    @property({
-        type: [Enum(EBulletType)],
-        visible: true,
-    })
+    @property({ type: [Enum(EBulletType)], visible: true })
     private bulletTypes: EBulletType[] = [];
 
     @property(RoomManager)

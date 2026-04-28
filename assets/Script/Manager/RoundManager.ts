@@ -16,16 +16,10 @@ class EnemySpawnTimeData {
 
 @ccclass('RoundManager')
 export class RoundManager extends Component {
-    @property({
-        type: [EnemySpawnTimeData],
-        visible: true,
-    })
+    @property({ type: [EnemySpawnTimeData], visible: true })
     public enemySpawnTimes: EnemySpawnTimeData[] = [];
 
-    @property({
-        type: CCInteger,
-        visible: true,
-    })
+    @property({ type: CCInteger, visible: true })
     private gameTimeLimit: number = 60;
 
     @property(Node)

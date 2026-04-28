@@ -10,10 +10,7 @@ export abstract class BaseLayerManager<T> extends Component {
     @property(Node)
     protected container: Node = null;
 
-    @property({
-        type: ButtonManager,
-        visible: false,
-    })
+    @property({ type: ButtonManager, visible: false })
     protected buttonManager: ButtonManager = null;
 
     protected onLoad(): void {

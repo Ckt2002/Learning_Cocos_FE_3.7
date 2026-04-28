@@ -5,10 +5,7 @@ const { ccclass, property } = _decorator;
 
 @ccclass('BulletController')
 export class BulletController extends Component {
-    @property({
-        type: BulletConfig,
-        readonly: true,
-    })
+    @property({ type: BulletConfig, readonly: true })
     public bulletConfig: BulletConfig;
 
     protected start(): void {

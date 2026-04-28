@@ -4,10 +4,7 @@ import { ButtonController } from "../UI/Button/ButtonController";
 
 @ccclass("ButtonManager")
 export class ButtonManager extends Component {
-    @property({
-        type: [ButtonController],
-        visible: false,
-    })
+    @property({ type: [ButtonController], visible: false })
     childButtons: ButtonController[] = [];
 
     private targetNode: Node = null;
