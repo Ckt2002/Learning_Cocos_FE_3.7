@@ -733,7 +733,7 @@
     },
     "moveSpeed": 200,
     "damage": 10,
-    "maxHealth": 100,
+    "maxHealth": 50,
     "currentHealth": 10,
     "healthBarController": {
       "__id__": 27

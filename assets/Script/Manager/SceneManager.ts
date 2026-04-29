@@ -5,15 +5,28 @@ const { ccclass } = _decorator;
 
 @ccclass('SceneManager')
 export class SceneManager extends Component {
+    public static instance: SceneManager = null;
+    private sceneName: string = '';
+
+    protected onLoad(): void {
+        if (!SceneManager.instance) {
+            SceneManager.instance = this;
+        }
+    }
+
     protected start(): void {
-        mEventEmitter.instance.registerEvent('CHANGE_SCENE', this.LoadScene, this);
+        mEventEmitter.instance.registerEvent('CHANGE_SCENE', this.loadScene.bind(this), this);
     }
 
     protected onDestroy(): void {
         mEventEmitter.instance.removeAllOwnerEvents(this);
+        SceneManager.instance = null;
     }
 
-    public LoadScene(sceneName: string) {
-        director.loadScene(sceneName);
+    public loadScene(sceneName: string): void {
+        this.sceneName = sceneName;
+        director.loadScene('Loading');
     }
+
+    public getSceneName(): string { return this.sceneName }
 }

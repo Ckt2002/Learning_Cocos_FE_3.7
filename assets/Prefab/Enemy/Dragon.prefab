@@ -731,9 +731,9 @@
     "__prefab": {
       "__id__": 35
     },
-    "moveSpeed": 200,
+    "moveSpeed": 100,
     "damage": 100,
-    "maxHealth": 300,
+    "maxHealth": 1000,
     "currentHealth": 10,
     "healthBarController": {
       "__id__": 27
