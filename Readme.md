@@ -154,7 +154,7 @@ Không phải lúc nào cũng phù hợp:
   - Thay đổi → ảnh hưởng tất cả instance
 - ❌ Project nhỏ / prototype
 
-## 🎮 6. Ứng dụng trong Game
+## 🎮 5. Ứng dụng trong Game
 
 ### 🎨 Rendering (Instancing)
 
