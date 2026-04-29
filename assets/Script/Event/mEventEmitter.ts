@@ -22,7 +22,6 @@ export class mEventEmitter {
         if (!this.listenerMap.has(owner)) {
             this.listenerMap.set(owner, []);
         }
-
         this.listenerMap.get(owner).push({ eventName, method });
     }
 

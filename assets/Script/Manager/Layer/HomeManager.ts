@@ -4,6 +4,7 @@ import { EButtonEvent } from '../../Enum/EButtonEvent';
 import { ButtonManager } from './ButtonManager';
 import { CGameEvent } from '../../Constant/CGameEvent';
 import { EGameState } from '../../Enum/EGameState';
+import { EPopup } from '../../Enum/EPopup';
 const { ccclass, property } = _decorator;
 
 @ccclass('HomeManager')
@@ -28,6 +29,10 @@ export class HomeManager extends Component {
             case EButtonEvent.OPEN_INVENTORY:
                 this.homeUINodes[0].active = false;
                 this.homeUINodes[1].active = true;
+                break;
+
+            case EButtonEvent.OPEN_SETTING:
+                mEventEmitter.instance.emit('ENABLE_POPUP', EPopup.SETTING);
                 break;
 
             case EButtonEvent.START:
