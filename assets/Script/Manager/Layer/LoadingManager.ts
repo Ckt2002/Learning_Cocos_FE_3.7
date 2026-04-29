@@ -32,10 +32,10 @@ export class LoadingManager extends Component {
                             console.log('completed');
                             mEventEmitter.instance.emit(CAudioEvent.RESET_BGM);
                         });
-                    }, 5000)
+                    }, 1500)
                 }
             )
-        }, 200);
+        }, 500);
     }
 
     private updateProgress(progress: number): void {

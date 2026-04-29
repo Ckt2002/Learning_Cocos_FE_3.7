@@ -994,7 +994,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "Inventory",
+    "_name": "Lobby",
     "_objFlags": 0,
     "_parent": {
       "__id__": 5
@@ -1016,7 +1016,7 @@
         "__id__": 81
       }
     ],
-    "_active": true,
+    "_active": false,
     "_components": [
       {
         "__id__": 138
