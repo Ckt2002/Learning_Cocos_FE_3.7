@@ -260,7 +260,7 @@ Sử dụng khi bạn cần **nhiều hệ thống phản ứng với cùng mộ
 
 ---
 
-# 🧩 Observer Pattern
+# 🧩 State Pattern
 
 ## 📌 1. Khái niệm
 
