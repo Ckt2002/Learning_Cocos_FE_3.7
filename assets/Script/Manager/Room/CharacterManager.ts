@@ -1,11 +1,11 @@
 import { _decorator, Component, Node, Vec2 } from 'cc';
 import { CharacterController } from '../../Character/CharacterController';
-import { GameManager } from '../GameManager';
 import { RoomManager } from '../Layer/RoomManager';
 import { ERoundStatus } from '../../Enum/EStatus';
 import { CharacterAnimation } from '../../Character/CharacterAnimation';
 import { CName } from '../../Constant/CName';
 import { CEvent } from '../../Constant/CEvent';
+import { RoundManager } from '../Layer/RoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterManager')
@@ -26,7 +26,6 @@ export class CharacterManager extends Component {
 
     private moveDirectionY: number = 0;
     private isAlive: boolean = true;
-    private timeOutObject: any = null;
 
     protected onLoad(): void {
         if (!CharacterManager.instance) {
@@ -44,7 +43,8 @@ export class CharacterManager extends Component {
     }
 
     protected update(dt: number): void {
-        if (GameManager.pauseGame) {
+        this.characterAnimation.pauseAnimation(RoundManager.pauseGame);
+        if (RoundManager.pauseGame || RoundManager.isWaiting) {
             return;
         }
         this.move(dt);
@@ -53,10 +53,7 @@ export class CharacterManager extends Component {
     protected onDestroy(): void {
         this.node.targetOff(this);
         this.roomManager.node.targetOff(this);
-        if (this.timeOutObject) {
-            clearTimeout(this.timeOutObject);
-            this.timeOutObject = null;
-        }
+        this.unscheduleAllCallbacks();
         CharacterManager.instance = null;
     }
 
@@ -115,9 +112,9 @@ export class CharacterManager extends Component {
             return;
         }
         this.characterAnimation.setAnimation(0, CName.ANIMATION.DEATH, false);
-        this.timeOutObject = setTimeout(() => {
+        this.scheduleOnce(() => {
             this.roomManager.endRound(ERoundStatus.LOSE);
-        }, 3000);
+        }, 4.3);
     }
 
     public reset() {
@@ -125,9 +122,6 @@ export class CharacterManager extends Component {
         this.characterController.reset();
         this.characterAnimation.setAnimation(0, CName.ANIMATION.PORTAL, false);
         this.characterAnimation.changeAnimation(0, CName.ANIMATION.IDLE, 0, true);
-        if (this.timeOutObject) {
-            clearTimeout(this.timeOutObject);
-            this.timeOutObject = null;
-        }
+        this.unscheduleAllCallbacks();
     }
 }

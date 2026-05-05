@@ -6,9 +6,9 @@ import { CharacterAnimation } from '../../Character/CharacterAnimation';
 import { BulletPooling } from '../../Pooling/BulletPooling';
 import { BulletController } from '../../Bullet/BulletController';
 import { EnemyManager } from './EnemyManager';
-import { GameManager } from '../GameManager';
 import { CName } from '../../Constant/CName';
 import { CEvent } from '../../Constant/CEvent';
+import { RoundManager } from '../Layer/RoundManager';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
@@ -52,7 +52,7 @@ export class BulletManager extends Component {
     }
 
     protected update(dt: number): void {
-        if (GameManager.pauseGame) {
+        if (RoundManager.pauseGame) {
             return;
         }
         this.fireCoolDown += dt;

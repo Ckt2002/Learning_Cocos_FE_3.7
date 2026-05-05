@@ -85,7 +85,7 @@ export class PopupManager extends Component {
                 this.hideAllPopups();
                 break;
 
-            case EButtonEvent.QUIT:
+            case EButtonEvent.QUIT_ROUND:
                 mEventEmitter.instance.emit(CEvent.GAME.CHANGE_STATE, EGameStatus.QUIT_ROUND);
                 this.hideAllPopups();
                 break;

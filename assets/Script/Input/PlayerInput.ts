@@ -1,6 +1,6 @@
 import { _decorator, Component, input, Input, EventKeyboard, KeyCode } from 'cc';
-import { GameManager } from '../Manager/GameManager';
 import { CName } from '../Constant/CName';
+import { RoundManager } from '../Manager/Layer/RoundManager';
 
 const { ccclass } = _decorator;
 
@@ -17,7 +17,7 @@ export class PlayerInput extends Component {
     }
 
     onKeyDown(event: EventKeyboard) {
-        if (GameManager.pauseGame) {
+        if (RoundManager.pauseGame) {
             return;
         }
         switch (event.keyCode) {
@@ -45,7 +45,7 @@ export class PlayerInput extends Component {
     }
 
     onKeyUp(event: EventKeyboard) {
-        if (GameManager.pauseGame) {
+        if (RoundManager.pauseGame) {
             return;
         }
         switch (event.keyCode) {

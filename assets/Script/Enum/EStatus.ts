@@ -1,6 +1,7 @@
 export enum EGameStatus {
-    START_ROUND = 1,
-    QUIT_ROUND = 5,
+    START_ROUND = 0,
+    QUIT_ROUND = 1,
+    QUIT_GAME = 2,
 };
 
 export enum ERoundStatus {

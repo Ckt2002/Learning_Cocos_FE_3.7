@@ -20,21 +20,21 @@ export class LoadingManager extends Component {
 
     private loadScene(): void {
         const sceneName = SceneManager.instance.getSceneName();
-        setTimeout(() => {
+        this.scheduleOnce(() => {
             director.preloadScene(sceneName,
                 (completedCount, totalCount) => {
                     const progress = completedCount / totalCount;
                     this.updateProgress(progress);
                 },
                 () => {
-                    setTimeout(() => {
+                    this.scheduleOnce(() => {
                         director.loadScene(sceneName, () => {
                             mEventEmitter.instance.emit(CEvent.AUDIO.RESET_BGM);
                         });
-                    }, 1500)
+                    }, 1.5);
                 }
-            )
-        }, 500);
+            );
+        }, 0.5);
     }
 
     private updateProgress(progress: number): void {

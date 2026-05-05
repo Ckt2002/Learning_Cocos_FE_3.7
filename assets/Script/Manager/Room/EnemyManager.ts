@@ -2,11 +2,11 @@ import { _decorator, CCInteger, Component, Vec3, Node } from "cc";
 import { EnemyController } from "../../Enemy/EnemyController";
 import { SpawnPosManager } from "./SpawnPosManager";
 import { EnemyPooling } from "../../Pooling/EnemyPooling";
-import { GameManager } from "../GameManager";
 import { RoomManager } from "../Layer/RoomManager";
 import { ERoundStatus } from "../../Enum/EStatus";
 import { EEnemyType } from '../../Enum/EType';
 import { CEvent } from "../../Constant/CEvent";
+import { RoundManager } from "../Layer/RoundManager";
 
 const { ccclass, property } = _decorator;
 
@@ -40,11 +40,12 @@ export class EnemyManager extends Component {
     }
 
     protected onEnable(): void {
+        this.unscheduleAllCallbacks();
         this.reset();
     }
 
     protected update(dt: number): void {
-        if (GameManager.pauseGame) {
+        if (RoundManager.pauseGame) {
             return;
         }
         this.controlEnemy(dt);
@@ -99,8 +100,10 @@ export class EnemyManager extends Component {
             }
             const bossDefeated = enemy.takeDamage(damage);
             if (bossDefeated) {
-                GameManager.pauseGame = true;
-                this.roomManager.endRound(ERoundStatus.WIN);
+                RoundManager.pauseGame = true;
+                this.scheduleOnce(() => {
+                    this.roomManager.endRound(ERoundStatus.WIN);
+                }, 2);
             }
             return;
         }

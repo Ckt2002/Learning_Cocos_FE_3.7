@@ -1,11 +1,11 @@
 import { _decorator, Component } from 'cc';
 import { mEventEmitter } from '../../Event/mEventEmitter';
 import { ButtonManager } from './ButtonManager';
-import { GameManager } from '../GameManager';
 import { CEvent } from '../../Constant/CEvent';
 import { EButtonEvent } from '../../Enum/EEvent';
 import { EPopupType } from '../../Enum/EType';
 import { ERoundStatus } from '../../Enum/EStatus';
+import { RoundManager } from './RoundManager';
 
 const { ccclass, property } = _decorator;
 
@@ -56,15 +56,16 @@ export class RoomManager extends Component {
     }
 
     public endRound(status: ERoundStatus) {
+        console.log("End Round");
         switch (status) {
             case ERoundStatus.WIN:
                 mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.WIN);
-                GameManager.pauseGame = true;
+                RoundManager.pauseGame = true;
                 break;
 
             case ERoundStatus.LOSE:
                 mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.LOSE);
-                GameManager.pauseGame = true;
+                RoundManager.pauseGame = true;
                 break;
 
             default:

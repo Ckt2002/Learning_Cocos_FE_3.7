@@ -39,6 +39,10 @@ export class HomeManager extends Component {
                 mEventEmitter.instance.emit(CEvent.GAME.CHANGE_STATE, EGameStatus.START_ROUND);
                 break;
 
+            case EButtonEvent.QUIT_GAME:
+                mEventEmitter.instance.emit(CEvent.GAME.CHANGE_STATE, EGameStatus.QUIT_GAME);
+                break;
+
             default:
                 break;
         }

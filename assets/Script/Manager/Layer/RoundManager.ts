@@ -1,5 +1,4 @@
 import { _decorator, CCInteger, Component, Enum, Node } from "cc";
-import { GameManager } from "../GameManager";
 import { CEvent } from "../../Constant/CEvent";
 import { EEnemyType } from "../../Enum/EType";
 
@@ -16,6 +15,9 @@ class EnemySpawnTimeData {
 
 @ccclass('RoundManager')
 export class RoundManager extends Component {
+    public static isWaiting: boolean = false;
+    public static pauseGame: boolean = false;
+
     @property({ type: [EnemySpawnTimeData], visible: true })
     public enemySpawnTimes: EnemySpawnTimeData[] = [];
 
@@ -26,8 +28,8 @@ export class RoundManager extends Component {
     private enemyNode: Node = null;
 
     private gameDuration: number = 0;
+    private waitTimer = 5;
     private enemySpawnDurations: Map<EEnemyType, { duration: number, spawnTime: number }> = new Map();
-    private timeOutObject: any = null;
 
     protected onLoad(): void {
         for (let data of this.enemySpawnTimes) {
@@ -41,19 +43,21 @@ export class RoundManager extends Component {
     }
 
     protected update(dt: number): void {
-        if (GameManager.pauseGame) {
+        if (RoundManager.pauseGame) {
+            return;
+        }
+
+        if (RoundManager.isWaiting) {
+            this.waitForSecond(dt);
             return;
         }
         this.calculateRoundTime(dt);
         this.calculateSpawnTime(dt);
     }
 
-    onDestroy() {
+    protected onDestroy(): void {
+        this.unscheduleAllCallbacks();
         this.node.targetOff(this);
-        if (this.timeOutObject) {
-            clearTimeout(this.timeOutObject);
-            this.timeOutObject = null;
-        }
     }
 
     private calculateRoundTime(dt: number) {
@@ -78,14 +82,17 @@ export class RoundManager extends Component {
 
     public init() {
         this.reset();
-        this.waitForSeconds(3);
+        RoundManager.isWaiting = true;
+        this.waitTimer = 3.5;
     }
 
-    // Fix following wait
-    private waitForSeconds(time: number) {
-        this.timeOutObject = setTimeout(() => {
-            GameManager.pauseGame = false;
-        }, time * 1000);
+    private waitForSecond(dt: number) {
+        this.waitTimer -= dt;
+        if (this.waitTimer <= 0) {
+            this.waitTimer = -1;
+            RoundManager.isWaiting = false;
+            RoundManager.pauseGame = false;
+        }
     }
 
     public reset() {
@@ -93,14 +100,15 @@ export class RoundManager extends Component {
         for (const value of this.enemySpawnDurations) {
             value[1].duration = 0;
         }
-        GameManager.pauseGame = true;
+        RoundManager.isWaiting = true;
+        RoundManager.pauseGame = false;
     }
 
     private pause() {
-        GameManager.pauseGame = true;
+        RoundManager.pauseGame = true;
     }
 
     private resume() {
-        GameManager.pauseGame = false;
+        RoundManager.pauseGame = false;
     }
 }
