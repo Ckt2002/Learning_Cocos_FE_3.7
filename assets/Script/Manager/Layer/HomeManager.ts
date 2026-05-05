@@ -1,10 +1,10 @@
 import { _decorator, Component, Node } from 'cc';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { EButtonEvent } from '../../Enum/EButtonEvent';
 import { ButtonManager } from './ButtonManager';
-import { CGameEvent } from '../../Constant/CGameEvent';
-import { EGameState } from '../../Enum/EGameState';
-import { EPopup } from '../../Enum/EPopup';
+import { CEvent } from '../../Constant/CEvent';
+import { EPopupType } from '../../Enum/EType';
+import { EGameStatus } from '../../Enum/EStatus';
+import { EButtonEvent } from '../../Enum/EEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('HomeManager')
@@ -32,11 +32,11 @@ export class HomeManager extends Component {
                 break;
 
             case EButtonEvent.OPEN_SETTING:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopup.SETTING);
+                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.SETTING);
                 break;
 
             case EButtonEvent.START:
-                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.START_ROUND);
+                mEventEmitter.instance.emit(CEvent.GAME.CHANGE_STATE, EGameStatus.START_ROUND);
                 break;
 
             default:

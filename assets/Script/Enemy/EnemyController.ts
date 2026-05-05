@@ -1,24 +1,14 @@
-import { _decorator, CCInteger, Component, Enum, Node, Tween, tween, UITransform } from "cc";
-import { CRoundEvent } from "../Constant/CRoundEvent";
-import { EEnemyType } from '../Enum/EEnemyType';
+import { _decorator, Component, Enum, Node, Tween, tween, UITransform } from "cc";
+import { EEnemyType } from '../Enum/EType';
 import { HealthBarController } from "../Health Bar/HealthBarController";
+import { EnemyConfig } from "./EnemyConfig";
 
 const { ccclass, property } = _decorator;
 
 @ccclass("EnemyController")
 export class EnemyController extends Component {
-
-    @property({ group: { name: "Stats" }, type: CCInteger })
-    public moveSpeed: number = 200;
-
-    @property({ group: { name: "Stats" }, type: CCInteger })
-    public damage: number = 10;
-
-    @property({ group: { name: "Stats" }, type: CCInteger })
-    public maxHealth: number = 10;
-
-    @property({ group: { name: "Stats" }, type: CCInteger })
-    public currentHealth: number = 10;
+    @property({ type: EnemyConfig, visible: true })
+    public stats: EnemyConfig;
 
     @property(HealthBarController)
     private healthBarController: HealthBarController = null;
@@ -31,6 +21,7 @@ export class EnemyController extends Component {
 
     private bounceTween: any = null;
     private originalSpriteWidth: number = 0;
+    private currentHealth: number = 10;
 
     protected onEnable(): void {
         this.reset();
@@ -52,11 +43,11 @@ export class EnemyController extends Component {
 
     public updateCurrentHealth(value: number) {
         this.currentHealth += value;
-        this.healthBarController.updateHealthBar(this.currentHealth / this.maxHealth);
+        this.healthBarController.updateHealthBar(this.currentHealth / this.stats.maxHealth);
     }
 
     private reset() {
-        this.currentHealth = this.maxHealth;
+        this.currentHealth = this.stats.maxHealth;
         this.updateCurrentHealth(0);
         this.stopAnimation();
     }

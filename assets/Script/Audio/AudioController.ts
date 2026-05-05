@@ -1,5 +1,5 @@
 import { _decorator, AudioClip, AudioSource, CCBoolean, Component } from "cc";
-import { EAudioClipType } from "../Enum/EAudioClipType";
+import { EAudioClipType } from "../Enum/EType";
 
 const { ccclass, property } = _decorator;
 

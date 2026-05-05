@@ -1,7 +1,7 @@
-import { _decorator, Enum, Node } from 'cc';
+import { _decorator, Node } from 'cc';
 import { EnemySpawnData } from '../Spawn/EnemySpawnData';
 import { PoolingController } from './PoolingController';
-import { EEnemyType } from '../Enum/EEnemyType';
+import { EEnemyType } from '../Enum/EType';
 
 const { ccclass, property } = _decorator;
 

@@ -1,6 +1,6 @@
 import { _decorator, Enum } from 'cc';
 import { SpawnData } from './SpawnInformation';
-import { EBulletType } from '../Enum/EBulletType';
+import { EBulletType } from '../Enum/EType';
 
 const { ccclass, property } = _decorator;
 

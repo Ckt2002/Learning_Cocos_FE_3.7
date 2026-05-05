@@ -1,6 +1,6 @@
 import { _decorator, Component, input, Input, EventKeyboard, KeyCode } from 'cc';
-import { CInputName } from '../Constant/CInputName';
 import { GameManager } from '../Manager/GameManager';
+import { CName } from '../Constant/CName';
 
 const { ccclass } = _decorator;
 
@@ -23,20 +23,20 @@ export class PlayerInput extends Component {
         switch (event.keyCode) {
             case KeyCode.KEY_W:
             case KeyCode.ARROW_UP:
-                this.node.emit(CInputName.MOVE_UP, 1);
+                this.node.emit(CName.INPUT.MOVE_UP, 1);
                 break;
 
             case KeyCode.KEY_S:
             case KeyCode.ARROW_DOWN:
-                this.node.emit(CInputName.MOVE_DOWN, -1);
+                this.node.emit(CName.INPUT.MOVE_DOWN, -1);
                 break;
 
             case KeyCode.SPACE:
-                this.node.emit(CInputName.SHOOT);
+                this.node.emit(CName.INPUT.SHOOT);
                 break;
 
             case KeyCode.KEY_E:
-                this.node.emit(CInputName.SWITCH_BULLET);
+                this.node.emit(CName.INPUT.SWITCH_BULLET);
                 break;
 
             default:
@@ -53,7 +53,7 @@ export class PlayerInput extends Component {
             case KeyCode.KEY_S:
             case KeyCode.ARROW_UP:
             case KeyCode.ARROW_DOWN:
-                this.node.emit(CInputName.STOP_MOVING, 0);
+                this.node.emit(CName.INPUT.STOP_MOVING, 0);
                 break;
 
             default:

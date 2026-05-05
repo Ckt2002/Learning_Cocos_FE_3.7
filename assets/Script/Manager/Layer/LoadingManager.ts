@@ -1,7 +1,7 @@
 import { _decorator, Component, director, Label, ProgressBar } from 'cc';
 import { SceneManager } from '../SceneManager';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { CAudioEvent } from '../../Constant/CAudioEvent';
+import { CEvent } from '../../Constant/CEvent';
 
 const { ccclass, property } = _decorator;
 
@@ -30,7 +30,7 @@ export class LoadingManager extends Component {
                     setTimeout(() => {
                         director.loadScene(sceneName, () => {
                             console.log('completed');
-                            mEventEmitter.instance.emit(CAudioEvent.RESET_BGM);
+                            mEventEmitter.instance.emit(CEvent.AUDIO.RESET_BGM);
                         });
                     }, 1500)
                 }

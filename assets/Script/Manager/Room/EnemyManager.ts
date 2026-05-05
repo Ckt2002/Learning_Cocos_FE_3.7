@@ -2,11 +2,11 @@ import { _decorator, CCInteger, Component, Vec3, Node } from "cc";
 import { EnemyController } from "../../Enemy/EnemyController";
 import { SpawnPosManager } from "./SpawnPosManager";
 import { EnemyPooling } from "../../Pooling/EnemyPooling";
-import { EEnemyType } from '../../Enum/EEnemyType';
-import { CRoundEvent } from "../../Constant/CRoundEvent";
 import { GameManager } from "../GameManager";
 import { RoomManager } from "../Layer/RoomManager";
-import { ERoundStatus } from "../../Enum/ERoundStatus";
+import { ERoundStatus } from "../../Enum/EStatus";
+import { EEnemyType } from '../../Enum/EType';
+import { CEvent } from "../../Constant/CEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -57,11 +57,11 @@ export class EnemyManager extends Component {
     }
 
     private registerEvents(): void {
-        this.node.on(CRoundEvent.SPAWN_ENEMY, this.spawnEnemyByType, this);
-        this.node.on(CRoundEvent.ENEMY_TAKE_DAMAGE, this.takeDamage, this);
+        this.node.on(CEvent.ROUND.SPAWN_ENEMY, this.spawnEnemyByType, this);
+        this.node.on(CEvent.ROUND.ENEMY_TAKE_DAMAGE, this.takeDamage, this);
 
-        this.roomManager.node.on(CRoundEvent.INIT_ROUND, this.reset, this);
-        this.roomManager.node.on(CRoundEvent.RESET_ROUND, this.reset, this);
+        this.roomManager.node.on(CEvent.ROUND.INIT_ROUND, this.reset, this);
+        this.roomManager.node.on(CEvent.ROUND.RESET_ROUND, this.reset, this);
     }
 
     private controlEnemy(dt: number): void {
@@ -74,7 +74,7 @@ export class EnemyManager extends Component {
             const enemyNode = enemy.node;
             const currentPosition = enemyNode.position;
             enemyNode.setPosition(
-                currentPosition.x + dt * enemy.moveSpeed * this.moveDirection,
+                currentPosition.x + dt * enemy.stats.moveSpeed * this.moveDirection,
                 currentPosition.y
             );
         }

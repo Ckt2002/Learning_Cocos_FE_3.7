@@ -1,7 +1,7 @@
 import { _decorator, Node } from 'cc';
 import { PoolingController } from './PoolingController';
 import { BulletSpawnData } from '../Spawn/BulletSpawnData';
-import { EBulletType } from '../Enum/EBulletType';
+import { EBulletType } from '../Enum/EType';
 
 const { ccclass, property } = _decorator;
 

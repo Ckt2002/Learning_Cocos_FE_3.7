@@ -1,15 +1,14 @@
 import { _decorator, Component, Enum, Node } from 'cc';
 import { CharacterManager } from './CharacterManager';
-import { EBulletType } from '../../Enum/EBulletType';
+import { EBulletType } from '../../Enum/EType';
 import { RoomManager } from '../Layer/RoomManager';
 import { CharacterAnimation } from '../../Character/CharacterAnimation';
 import { BulletPooling } from '../../Pooling/BulletPooling';
 import { BulletController } from '../../Bullet/BulletController';
 import { EnemyManager } from './EnemyManager';
 import { GameManager } from '../GameManager';
-import { CInputName } from '../../Constant/CInputName';
-import { CRoundEvent } from '../../Constant/CRoundEvent';
-import { CAnimationName } from '../../Constant/CAnimationName';
+import { CName } from '../../Constant/CName';
+import { CEvent } from '../../Constant/CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass("BulletManager")
@@ -43,7 +42,7 @@ export class BulletManager extends Component {
         this.activatedBullets = [];
         this.pooling = this.node.getComponent(BulletPooling);
         this.bulletSpawnNode = this.characterManager.characterController.firePoint;
-        this.fireRate = this.characterManager.characterController.fireRate;
+        this.fireRate = this.characterManager.characterController.stats.fireRate;
         this.fireCoolDown = this.fireRate;
         this.registerEvents();
     }
@@ -76,15 +75,16 @@ export class BulletManager extends Component {
     }
 
     private registerEvents(): void {
-        this.node.on(CInputName.SWITCH_BULLET, this.switchBullet, this);
-        this.node.on(CRoundEvent.ENEMY_TAKE_DAMAGE, this.causeDamage, this);
+        this.node.on(CName.INPUT.SWITCH_BULLET, this.switchBullet, this);
+        this.node.on(CEvent.ROUND.ENEMY_TAKE_DAMAGE, this.causeDamage, this);
 
-        this.characterManager.node.on(CInputName.SHOOT, this.shoot, this);
+        this.characterManager.node.on(CName.INPUT.SHOOT, this.shoot, this);
 
-        this.roomManager.node.on(CRoundEvent.INIT_ROUND, this.reset, this);
-        this.roomManager.node.on(CRoundEvent.RESET_ROUND, this.reset, this);
+        this.roomManager.node.on(CEvent.ROUND.INIT_ROUND, this.reset, this);
+        this.roomManager.node.on(CEvent.ROUND.RESET_ROUND, this.reset, this);
     }
 
+    // Move following to character
     private shoot() {
         if (this.fireCoolDown < this.fireRate) {
             return;
@@ -94,7 +94,7 @@ export class BulletManager extends Component {
         bullet.setWorldPosition(this.bulletSpawnNode.getWorldPosition());
         bullet.active = true;
         this.activatedBullets.push(bullet.getComponent(BulletController));
-        this.characterAnimation.setAnimationOne(1, CAnimationName.SHOOT);
+        this.characterAnimation.setAnimationOne(1, CName.ANIMATION.SHOOT);
     }
 
     private controlBullets(dt: number) {
@@ -105,12 +105,12 @@ export class BulletManager extends Component {
                 continue;
             }
             const newPosition = bullet.node.position;
-            bullet.node.setPosition(newPosition.x + bullet.bulletConfig.moveSpeed * dt, newPosition.y);
+            bullet.node.setPosition(newPosition.x + bullet.stats.moveSpeed * dt, newPosition.y);
         }
     }
 
     private causeDamage(target: Node, damage: number) {
-        this.enemyNode.emit(CRoundEvent.ENEMY_TAKE_DAMAGE, target, damage);
+        this.enemyNode.emit(CEvent.ROUND.ENEMY_TAKE_DAMAGE, target, damage);
     }
 
     private switchBullet() {

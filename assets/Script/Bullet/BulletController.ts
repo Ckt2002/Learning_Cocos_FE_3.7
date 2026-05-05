@@ -1,12 +1,12 @@
 import { _decorator, Component, Collider2D, Contact2DType, IPhysics2DContact } from 'cc';
 import { BulletConfig } from './BulletConfig';
-import { CRoundEvent } from '../Constant/CRoundEvent';
+import { CEvent } from '../Constant/CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('BulletController')
 export class BulletController extends Component {
     @property({ type: BulletConfig, readonly: true })
-    public bulletConfig: BulletConfig;
+    public stats: BulletConfig;
 
     protected start(): void {
         const collider = this.node.getComponent(Collider2D);
@@ -18,7 +18,7 @@ export class BulletController extends Component {
     }
 
     private onCollisionEnter(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
-        this.node.parent.emit(CRoundEvent.ENEMY_TAKE_DAMAGE, other.node, this.bulletConfig.damage);
+        this.node.parent.emit(CEvent.ROUND.ENEMY_TAKE_DAMAGE, other.node, this.stats.damage);
         this.node.active = false;
     }
 }

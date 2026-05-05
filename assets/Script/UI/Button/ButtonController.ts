@@ -1,8 +1,8 @@
 import { _decorator, Component, Enum, Node } from 'cc';
-import { EButtonEvent } from '../../Enum/EButtonEvent';
+import { CEvent } from '../../Constant/CEvent';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { CAudioEvent } from '../../Constant/CAudioEvent';
-import { EAudioClipType } from '../../Enum/EAudioClipType';
+import { EButtonEvent } from '../../Enum/EEvent';
+import { EAudioClipType } from '../../Enum/EType';
 const { ccclass, property } = _decorator;
 
 @ccclass('ButtonController')
@@ -18,7 +18,7 @@ export class ButtonController extends Component {
     }
 
     public buttonAction() {
-        mEventEmitter.instance.emit(CAudioEvent.PLAY_SFX, EAudioClipType.CLICK);
+        mEventEmitter.instance.emit(CEvent.AUDIO.PLAY_SFX, EAudioClipType.CLICK);
         this.targetNode.emit("ButtonEvent", this.buttonEventType);
     }
 }

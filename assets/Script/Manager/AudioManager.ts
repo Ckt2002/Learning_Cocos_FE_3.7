@@ -1,10 +1,9 @@
 import { _decorator, Component, sys } from "cc";
-import { AudioController } from "./AudioController";
-import { EAudioClipType } from "../Enum/EAudioClipType";
-import { EAudioType } from '../Enum/EAudioType';
+import { AudioController } from "../Audio/AudioController";
 import { mEventEmitter } from "../Event/mEventEmitter";
-import { CAudioEvent } from "../Constant/CAudioEvent";
 import { CLocalStorageKey } from "../Constant/CLocalStorageKey";
+import { EAudioClipType, EAudioType } from "../Enum/EType";
+import { CEvent } from "../Constant/CEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -37,10 +36,10 @@ export class AudioManager extends Component {
     }
 
     private registerEvents() {
-        mEventEmitter.instance.registerEvent(CAudioEvent.SET_VOLUME, this.setVolume.bind(this), this);
-        mEventEmitter.instance.registerEvent(CAudioEvent.PLAY_SFX, this.playSFX.bind(this), this);
-        mEventEmitter.instance.registerEvent(CAudioEvent.RESET_BGM, this.resetBgm.bind(this), this);
-        mEventEmitter.instance.registerEvent(CAudioEvent.STOP_ALL_AUDIOS, this.stopAllAudios.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.AUDIO.SET_VOLUME, this.setVolume.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.AUDIO.PLAY_SFX, this.playSFX.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.AUDIO.RESET_BGM, this.resetBgm.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.AUDIO.STOP_ALL_AUDIOS, this.stopAllAudios.bind(this), this);
     }
 
     public playSFX(sfxType: EAudioClipType): void {

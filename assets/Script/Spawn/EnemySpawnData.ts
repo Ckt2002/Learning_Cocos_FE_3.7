@@ -1,6 +1,6 @@
-import { _decorator, Enum, Prefab } from 'cc';
+import { _decorator, Enum } from 'cc';
 import { SpawnData } from './SpawnInformation';
-import { EEnemyType } from '../Enum/EEnemyType';
+import { EEnemyType } from '../Enum/EType';
 
 const { ccclass, property } = _decorator;
 

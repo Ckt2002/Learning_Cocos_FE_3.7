@@ -1,7 +1,7 @@
-import { _decorator, CCInteger, Component, Enum, Game, Node } from "cc";
-import { EEnemyType } from "../../Enum/EEnemyType";
-import { CRoundEvent } from "../../Constant/CRoundEvent";
+import { _decorator, CCInteger, Component, Enum, Node } from "cc";
 import { GameManager } from "../GameManager";
+import { CEvent } from "../../Constant/CEvent";
+import { EEnemyType } from "../../Enum/EType";
 
 const { ccclass, property } = _decorator;
 
@@ -34,8 +34,8 @@ export class RoundManager extends Component {
             this.enemySpawnDurations.set(data.type, { duration: 0, spawnTime: data.spawnTime });
         }
 
-        this.node.on(CRoundEvent.INIT_ROUND, this.init, this);
-        this.node.on(CRoundEvent.RESET_ROUND, this.init, this);
+        this.node.on(CEvent.ROUND.INIT_ROUND, this.init, this);
+        this.node.on(CEvent.ROUND.RESET_ROUND, this.init, this);
         this.node.on('PAUSE', this.pause, this);
         this.node.on('RESUME', this.resume, this);
     }
@@ -68,7 +68,7 @@ export class RoundManager extends Component {
             const type = data[0];
             const time = data[1];
             if (time.duration >= time.spawnTime) {
-                this.enemyNode.emit(CRoundEvent.SPAWN_ENEMY, type);
+                this.enemyNode.emit(CEvent.ROUND.SPAWN_ENEMY, type);
                 time.duration = 0;
                 continue;
             }

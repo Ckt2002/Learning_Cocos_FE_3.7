@@ -1,6 +1,6 @@
 import { _decorator, Component, director } from "cc";
 import { mEventEmitter } from "../Event/mEventEmitter";
-import { CAudioEvent } from "../Constant/CAudioEvent";
+import { CEvent } from "../Constant/CEvent";
 
 const { ccclass } = _decorator;
 
@@ -25,7 +25,7 @@ export class SceneManager extends Component {
     }
 
     public loadScene(sceneName: string): void {
-        mEventEmitter.instance.emit(CAudioEvent.STOP_ALL_AUDIOS);
+        mEventEmitter.instance.emit(CEvent.AUDIO.STOP_ALL_AUDIOS);
         this.sceneName = sceneName;
         director.loadScene('Loading');
     }

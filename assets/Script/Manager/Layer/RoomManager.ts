@@ -1,11 +1,11 @@
 import { _decorator, Component } from 'cc';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { EButtonEvent } from '../../Enum/EButtonEvent';
-import { ERoundStatus } from '../../Enum/ERoundStatus';
-import { CRoundEvent } from '../../Constant/CRoundEvent';
 import { ButtonManager } from './ButtonManager';
-import { EPopup } from '../../Enum/EPopup';
 import { GameManager } from '../GameManager';
+import { CEvent } from '../../Constant/CEvent';
+import { EButtonEvent } from '../../Enum/EEvent';
+import { EPopupType } from '../../Enum/EType';
+import { ERoundStatus } from '../../Enum/EStatus';
 
 const { ccclass, property } = _decorator;
 
@@ -29,14 +29,15 @@ export class RoomManager extends Component {
         mEventEmitter.instance.registerEvent(ERoundStatus.RESUME, this.resume.bind(this), this);
         mEventEmitter.instance.registerEvent(ERoundStatus.RESTART, this.restart.bind(this), this);
 
-        this.node.emit(CRoundEvent.INIT_ROUND);
+        this.node.emit(CEvent.ROUND.INIT_ROUND);
     }
 
     protected handleButtonEvents(buttonEvent: EButtonEvent) {
         switch (buttonEvent) {
             case EButtonEvent.PAUSE:
                 this.pause();
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopup.PAUSE);
+                // Fix event name here
+                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.PAUSE);
                 break;
             default:
                 break;
@@ -52,18 +53,18 @@ export class RoomManager extends Component {
     }
 
     public restart() {
-        this.node.emit(CRoundEvent.RESET_ROUND);
+        this.node.emit(CEvent.ROUND.RESET_ROUND);
     }
 
     public endRound(status: ERoundStatus) {
         switch (status) {
             case ERoundStatus.WIN:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopup.WIN);
+                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.WIN);
                 GameManager.pauseGame = true;
                 break;
 
             case ERoundStatus.LOSE:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopup.LOSE);
+                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.LOSE);
                 GameManager.pauseGame = true;
                 break;
 

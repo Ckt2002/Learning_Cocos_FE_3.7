@@ -1,8 +1,8 @@
 import { _decorator, Component, Enum, Slider, Sprite, SpriteFrame, sys } from "cc";
 import { mEventEmitter } from "../../Event/mEventEmitter";
-import { CAudioEvent } from "../../Constant/CAudioEvent";
-import { EAudioType } from "../../Enum/EAudioType";
+import { EAudioType } from "../../Enum/EType";
 import { CLocalStorageKey } from "../../Constant/CLocalStorageKey";
+import { CEvent } from "../../Constant/CEvent";
 
 const { ccclass, property } = _decorator;
 
@@ -39,7 +39,7 @@ export class SettingItem extends Component {
     }
 
     public onSlide() {
-        mEventEmitter.instance.emit(CAudioEvent.SET_VOLUME, this.audioType, this.slider.progress);
+        mEventEmitter.instance.emit(CEvent.AUDIO.SET_VOLUME, this.audioType, this.slider.progress);
         sys.localStorage.setItem(this.storageKey, this.slider.toString());
         if (this.slider.progress > 0) {
             this.icon.spriteFrame = this.iconFrames[0];

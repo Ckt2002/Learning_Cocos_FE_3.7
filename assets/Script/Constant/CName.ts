@@ -1,5 +1,5 @@
 export const CName = {
-    AnimationName: {
+    ANIMATION: {
         AIM: 'aim',
         DEATH: 'death',
         HOVERBOARD: 'hoverboard',
@@ -13,11 +13,17 @@ export const CName = {
         WALK: 'walk',
     },
 
-    InputName: {
-        MOVE_UP: "MOVE_UP",
-        MOVE_DOWN: "MOVE_DOWN",
-        STOP_MOVING: "STOP_MOVING",
-        SHOOT: "SHOOT",
-        SWITCH_BULLET: "SWITCH_BULLET",
+    INPUT: {
+        MOVE_UP: 'MOVE_UP',
+        MOVE_DOWN: 'MOVE_DOWN',
+        STOP_MOVING: 'STOP_MOVING',
+        SHOOT: 'SHOOT',
+        SWITCH_BULLET: 'SWITCH_BULLET',
+    },
+
+    SCENE: {
+        HOME: 'Home',
+        LOADING: 'Loading',
+        ROOM: 'Room',
     }
 } as const

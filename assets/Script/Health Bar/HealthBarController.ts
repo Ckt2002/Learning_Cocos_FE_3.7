@@ -1,5 +1,4 @@
 import { _decorator, Component, ProgressBar, tween, UITransform } from "cc";
-import { CRoundEvent } from "../Constant/CRoundEvent";
 
 const { ccclass, property } = _decorator;
 

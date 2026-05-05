@@ -1255,8 +1255,8 @@
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
-      "x": null,
-      "y": null
+      "x": 0,
+      "y": 0
     },
     "_id": "60WXlmdwFKQoN9jetSjH27"
   },

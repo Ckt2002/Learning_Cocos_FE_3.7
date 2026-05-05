@@ -1,12 +1,11 @@
 import { _decorator, Component, Node, Vec2 } from 'cc';
 import { CharacterController } from '../../Character/CharacterController';
-import { CInputName } from '../../Constant/CInputName';
-import { CRoundEvent } from '../../Constant/CRoundEvent';
 import { GameManager } from '../GameManager';
 import { RoomManager } from '../Layer/RoomManager';
-import { ERoundStatus } from '../../Enum/ERoundStatus';
+import { ERoundStatus } from '../../Enum/EStatus';
 import { CharacterAnimation } from '../../Character/CharacterAnimation';
-import { CAnimationName } from '../../Constant/CAnimationName';
+import { CName } from '../../Constant/CName';
+import { CEvent } from '../../Constant/CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterManager')
@@ -62,14 +61,15 @@ export class CharacterManager extends Component {
     }
 
     private registerEvents(): void {
-        this.node.on(CInputName.MOVE_UP, this.setDirection, this);
-        this.node.on(CInputName.MOVE_DOWN, this.setDirection, this);
-        this.node.on(CInputName.STOP_MOVING, this.setDirection, this);
-        this.node.on(CInputName.SWITCH_BULLET, this.onSwitchBullet, this);
-        this.node.on(CRoundEvent.PLAYER_TAKE_DAMAGE, this.takeDamage, this);
+        this.node.on(CName.INPUT.MOVE_UP, this.setDirection, this);
+        this.node.on(CName.INPUT.MOVE_DOWN, this.setDirection, this);
+        this.node.on(CName.INPUT.STOP_MOVING, this.setDirection, this);
+        this.node.on(CName.INPUT.SWITCH_BULLET, this.onSwitchBullet, this);
 
-        this.roomManager.node.on(CRoundEvent.INIT_ROUND, this.reset, this);
-        this.roomManager.node.on(CRoundEvent.RESET_ROUND, this.reset, this);
+        this.node.on(CEvent.ROUND.PLAYER_TAKE_DAMAGE, this.takeDamage, this);
+
+        this.roomManager.node.on(CEvent.ROUND.INIT_ROUND, this.reset, this);
+        this.roomManager.node.on(CEvent.ROUND.RESET_ROUND, this.reset, this);
     }
 
     private setDirection(direction: number): void {
@@ -81,27 +81,27 @@ export class CharacterManager extends Component {
             return;
         }
         if (!this.characterController || this.moveDirectionY === 0) {
-            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
+            this.characterAnimation.setAnimation(0, CName.ANIMATION.IDLE, true);
             return;
         }
 
         const characterNode = this.characterController.node;
         const currentPosition = characterNode.position;
-        if (!this.checkValidMove(currentPosition.y, this.characterController.limitVertical)) {
-            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
+        if (!this.checkValidMove(currentPosition.y, this.characterController.stats.movementLimit)) {
+            this.characterAnimation.setAnimation(0, CName.ANIMATION.IDLE, true);
             return;
         }
 
-        this.characterAnimation.setAnimation(0, CAnimationName.RUN, true);
+        this.characterAnimation.setAnimation(0, CName.ANIMATION.RUN, true);
 
         characterNode.setPosition(
             currentPosition.x,
-            currentPosition.y + dt * this.characterController.moveSpeed * this.moveDirectionY
+            currentPosition.y + dt * this.characterController.stats.moveSpeed * this.moveDirectionY
         );
     }
 
     private onSwitchBullet(): void {
-        this.bulletManagerNode.emit(CInputName.SWITCH_BULLET);
+        this.bulletManagerNode.emit(CName.INPUT.SWITCH_BULLET);
     }
 
     private checkValidMove(currentPositionY: number, limit: Vec2): boolean {
@@ -114,7 +114,7 @@ export class CharacterManager extends Component {
         if (this.isAlive) {
             return;
         }
-        this.characterAnimation.setAnimation(0, CAnimationName.DEATH, false);
+        this.characterAnimation.setAnimation(0, CName.ANIMATION.DEATH, false);
         this.timeOutObject = setTimeout(() => {
             this.roomManager.endRound(ERoundStatus.LOSE);
         }, 3000);
@@ -123,8 +123,8 @@ export class CharacterManager extends Component {
     public reset() {
         this.isAlive = true;
         this.characterController.reset();
-        this.characterAnimation.setAnimation(0, CAnimationName.PORTAL, false);
-        this.characterAnimation.changeAnimation(0, CAnimationName.IDLE, 0, true);
+        this.characterAnimation.setAnimation(0, CName.ANIMATION.PORTAL, false);
+        this.characterAnimation.changeAnimation(0, CName.ANIMATION.IDLE, 0, true);
         if (this.timeOutObject) {
             clearTimeout(this.timeOutObject);
             this.timeOutObject = null;

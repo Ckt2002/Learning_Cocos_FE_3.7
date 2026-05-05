@@ -1,11 +1,10 @@
 import { _decorator, Component, Node } from 'cc';
 import { mEventEmitter } from '../../Event/mEventEmitter';
-import { EPopup } from '../../Enum/EPopup';
-import { EButtonEvent } from '../../Enum/EButtonEvent';
 import { ButtonManager } from './ButtonManager';
-import { ERoundStatus } from '../../Enum/ERoundStatus';
-import { EGameState } from '../../Enum/EGameState';
-import { CGameEvent } from '../../Constant/CGameEvent';
+import { CEvent } from '../../Constant/CEvent';
+import { EPopupType } from '../../Enum/EType';
+import { EButtonEvent } from '../../Enum/EEvent';
+import { EGameStatus, ERoundStatus } from '../../Enum/EStatus';
 const { ccclass, property } = _decorator;
 
 @ccclass("PopupManager")
@@ -34,13 +33,14 @@ export class PopupManager extends Component {
         mEventEmitter.instance.removeAllOwnerEvents(this);
     }
 
+    // Fix event name here
     private init(): void {
         this.node.on("ButtonEvent", this.handleButtonEvents, this);
 
         mEventEmitter.instance.registerEvent('ENABLE_POPUP', this.showPopup.bind(this), this);
     }
 
-    private showPopup(popupType: EPopup) {
+    private showPopup(popupType: EPopupType) {
         this.container.active = true;
         this.popupUINodes[popupType].active = true;
         const alreadyExists = this.activatedNodes.some(item => item === this.popupUINodes[popupType]);
@@ -49,7 +49,7 @@ export class PopupManager extends Component {
         }
     }
 
-    private hidePopup(popupType: EPopup) {
+    private hidePopup(popupType: EPopupType) {
         this.popupUINodes[popupType].active = false;
         const index = this.activatedNodes.indexOf(this.popupUINodes[popupType], 0);
         this.activatedNodes.splice(index, 1);
@@ -70,15 +70,15 @@ export class PopupManager extends Component {
         switch (buttonEvent) {
             case EButtonEvent.RESUME:
                 mEventEmitter.instance.emit(ERoundStatus.RESUME);
-                this.hidePopup(EPopup.PAUSE);
+                this.hidePopup(EPopupType.PAUSE);
                 break;
 
             case EButtonEvent.OPEN_SETTING:
-                this.showPopup(EPopup.SETTING);
+                this.showPopup(EPopupType.SETTING);
                 break;
 
             case EButtonEvent.CLOSE_SETTING:
-                this.hidePopup(EPopup.SETTING);
+                this.hidePopup(EPopupType.SETTING);
                 break;
 
             case EButtonEvent.RESTART:
@@ -87,7 +87,7 @@ export class PopupManager extends Component {
                 break;
 
             case EButtonEvent.QUIT:
-                mEventEmitter.instance.emit(CGameEvent.CHANGE_STATE, EGameState.QUIT_ROUND);
+                mEventEmitter.instance.emit(CEvent.GAME.CHANGE_STATE, EGameStatus.QUIT_ROUND);
                 this.hideAllPopups();
                 break;
 
