@@ -110,7 +110,6 @@ export class EnemyManager extends Component {
         for (let enemy of this.activatedEnemies) {
             enemy.node.active = false;
         }
-
         this.activatedEnemies = [];
     }
 }

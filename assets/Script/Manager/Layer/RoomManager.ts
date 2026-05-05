@@ -24,7 +24,7 @@ export class RoomManager extends Component {
     }
 
     protected init(): void {
-        this.node.on("ButtonEvent", this.handleButtonEvents, this);
+        this.node.on(CEvent.BUTTON.BUTTON_EVENT, this.handleButtonEvents, this);
 
         mEventEmitter.instance.registerEvent(ERoundStatus.RESUME, this.resume.bind(this), this);
         mEventEmitter.instance.registerEvent(ERoundStatus.RESTART, this.restart.bind(this), this);
@@ -36,8 +36,7 @@ export class RoomManager extends Component {
         switch (buttonEvent) {
             case EButtonEvent.PAUSE:
                 this.pause();
-                // Fix event name here
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.PAUSE);
+                mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.PAUSE);
                 break;
             default:
                 break;
@@ -45,11 +44,11 @@ export class RoomManager extends Component {
     }
 
     public pause() {
-        this.node.emit('PAUSE');
+        this.node.emit(CEvent.ROUND.PAUSE);
     }
 
     public resume() {
-        this.node.emit('RESUME');
+        this.node.emit(CEvent.ROUND.RESUME);
     }
 
     public restart() {
@@ -59,12 +58,12 @@ export class RoomManager extends Component {
     public endRound(status: ERoundStatus) {
         switch (status) {
             case ERoundStatus.WIN:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.WIN);
+                mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.WIN);
                 GameManager.pauseGame = true;
                 break;
 
             case ERoundStatus.LOSE:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.LOSE);
+                mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.LOSE);
                 GameManager.pauseGame = true;
                 break;
 

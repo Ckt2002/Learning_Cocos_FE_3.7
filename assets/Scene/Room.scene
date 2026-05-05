@@ -5562,7 +5562,7 @@
     "_lpos": {
       "__type__": "cc.Vec3",
       "x": -600,
-      "y": 70,
+      "y": -300,
       "z": 0
     },
     "_lrot": {
@@ -5769,7 +5769,7 @@
     },
     "_enabled": true,
     "__prefab": null,
-    "stat": {
+    "stats": {
       "__id__": 181
     },
     "firePoint": {
@@ -5783,12 +5783,12 @@
   {
     "__type__": "CharacterConfig",
     "moveSpeed": 200,
-    "fireRate": 0.5,
+    "fireRate": 0.4,
     "maxHealth": 100,
     "movementLimit": {
       "__type__": "cc.Vec2",
-      "x": 70,
-      "y": -340
+      "x": -300,
+      "y": 70
     }
   },
   {

@@ -33,11 +33,10 @@ export class PopupManager extends Component {
         mEventEmitter.instance.removeAllOwnerEvents(this);
     }
 
-    // Fix event name here
     private init(): void {
-        this.node.on("ButtonEvent", this.handleButtonEvents, this);
+        this.node.on(CEvent.BUTTON.BUTTON_EVENT, this.handleButtonEvents, this);
 
-        mEventEmitter.instance.registerEvent('ENABLE_POPUP', this.showPopup.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.LAYER.ENABLE_POPUP, this.showPopup.bind(this), this);
     }
 
     private showPopup(popupType: EPopupType) {

@@ -19,6 +19,6 @@ export class ButtonController extends Component {
 
     public buttonAction() {
         mEventEmitter.instance.emit(CEvent.AUDIO.PLAY_SFX, EAudioClipType.CLICK);
-        this.targetNode.emit("ButtonEvent", this.buttonEventType);
+        this.targetNode.emit(CEvent.BUTTON.BUTTON_EVENT, this.buttonEventType);
     }
 }

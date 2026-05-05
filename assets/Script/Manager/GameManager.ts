@@ -2,6 +2,7 @@ import { _decorator, Component } from 'cc';
 import { mEventEmitter } from '../Event/mEventEmitter';
 import { EGameStatus } from '../Enum/EStatus';
 import { CEvent } from '../Constant/CEvent';
+import { CName } from '../Constant/CName';
 const { ccclass } = _decorator;
 
 @ccclass('GameManager')
@@ -19,11 +20,11 @@ export class GameManager extends Component {
     public changeGameState(gameState: EGameStatus): void {
         switch (gameState) {
             case EGameStatus.START_ROUND:
-                mEventEmitter.instance.emit('CHANGE_SCENE', "Game");
+                mEventEmitter.instance.emit(CEvent.SCENE.CHANGE_SCENE, CName.SCENE.ROOM);
                 break;
 
             case EGameStatus.QUIT_ROUND:
-                mEventEmitter.instance.emit('CHANGE_SCENE', "Home");
+                mEventEmitter.instance.emit(CEvent.SCENE.CHANGE_SCENE, CName.SCENE.HOME);
                 break;
 
             default:

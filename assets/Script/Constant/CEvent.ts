@@ -3,6 +3,10 @@ export const CEvent = {
         CHANGE_STATE: 'CHANGE_STATE',
     },
 
+    SCENE: {
+        CHANGE_SCENE: 'CHANGE_SCENE',
+    },
+
     AUDIO: {
         SET_VOLUME: 'SET_VOLUME',
         PLAY_SFX: 'PLAY_SFX',
@@ -29,9 +33,14 @@ export const CEvent = {
         SPAWN_ENEMY: 'SPAWN_ENEMY',
         PLAYER_TAKE_DAMAGE: 'PLAYER_TAKE_DAMAGE',
         ENEMY_TAKE_DAMAGE: 'ENEMY_TAKE_DAMAGE',
+
+        PAUSE: 'PAUSE',
+        RESUME: 'RESUME',
+        RESTART: 'RESTART',
     },
 
     BUTTON: {
+        BUTTON_EVENT: 'BUTTON_EVENT',
         MAIN: 'MAIN',
         OPEN_INVENTORY: 'OPEN_INVENTORY',
 
@@ -43,5 +52,5 @@ export const CEvent = {
 
         OPEN_SETTING: 'OPEN_SETTING',
         CLOSE_SETTING: 'CLOSE_SETTING',
-    }
+    },
 } as const;

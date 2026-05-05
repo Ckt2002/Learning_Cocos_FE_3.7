@@ -36,8 +36,8 @@ export class RoundManager extends Component {
 
         this.node.on(CEvent.ROUND.INIT_ROUND, this.init, this);
         this.node.on(CEvent.ROUND.RESET_ROUND, this.init, this);
-        this.node.on('PAUSE', this.pause, this);
-        this.node.on('RESUME', this.resume, this);
+        this.node.on(CEvent.ROUND.PAUSE, this.pause, this);
+        this.node.on(CEvent.ROUND.RESUME, this.resume, this);
     }
 
     protected update(dt: number): void {
@@ -81,6 +81,7 @@ export class RoundManager extends Component {
         this.waitForSeconds(3);
     }
 
+    // Fix following wait
     private waitForSeconds(time: number) {
         this.timeOutObject = setTimeout(() => {
             GameManager.pauseGame = false;

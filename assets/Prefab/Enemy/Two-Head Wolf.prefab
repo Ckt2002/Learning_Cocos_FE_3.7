@@ -36,16 +36,16 @@
         "__id__": 34
       },
       {
-        "__id__": 36
+        "__id__": 37
       }
     ],
     "_prefab": {
-      "__id__": 38
+      "__id__": 39
     },
     "_lpos": {
       "__type__": "cc.Vec3",
-      "x": 183.807,
-      "y": -205.175,
+      "x": 0,
+      "y": 0,
       "z": 0
     },
     "_lrot": {
@@ -731,10 +731,9 @@
     "__prefab": {
       "__id__": 35
     },
-    "moveSpeed": 150,
-    "damage": 30,
-    "maxHealth": 300,
-    "currentHealth": 10,
+    "stats": {
+      "__id__": 36
+    },
     "healthBarController": {
       "__id__": 27
     },
@@ -749,6 +748,12 @@
     "fileId": "65PfXU/lJNPph3Q2lhBha3"
   },
   {
+    "__type__": "EnemyConfig",
+    "moveSpeed": 150,
+    "damage": 30,
+    "maxHealth": 200
+  },
+  {
     "__type__": "cc.RigidBody2D",
     "_name": "",
     "_objFlags": 0,
@@ -757,7 +762,7 @@
     },
     "_enabled": true,
     "__prefab": {
-      "__id__": 37
+      "__id__": 38
     },
     "enabledContactListener": false,
     "bullet": false,

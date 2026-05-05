@@ -29,7 +29,6 @@ export class LoadingManager extends Component {
                 () => {
                     setTimeout(() => {
                         director.loadScene(sceneName, () => {
-                            console.log('completed');
                             mEventEmitter.instance.emit(CEvent.AUDIO.RESET_BGM);
                         });
                     }, 1500)

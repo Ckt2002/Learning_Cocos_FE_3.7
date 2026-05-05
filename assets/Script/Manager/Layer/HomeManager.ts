@@ -21,7 +21,7 @@ export class HomeManager extends Component {
     }
 
     protected init(): void {
-        this.node.on("ButtonEvent", this.handleButtonEvents, this);
+        this.node.on(CEvent.BUTTON.BUTTON_EVENT, this.handleButtonEvents, this);
     }
 
     protected handleButtonEvents(buttonEvent: EButtonEvent) {
@@ -32,7 +32,7 @@ export class HomeManager extends Component {
                 break;
 
             case EButtonEvent.OPEN_SETTING:
-                mEventEmitter.instance.emit('ENABLE_POPUP', EPopupType.SETTING);
+                mEventEmitter.instance.emit(CEvent.LAYER.ENABLE_POPUP, EPopupType.SETTING);
                 break;
 
             case EButtonEvent.START:

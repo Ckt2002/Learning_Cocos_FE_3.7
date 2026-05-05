@@ -1,4 +1,4 @@
-import { _decorator, Component, Enum, instantiate, Node } from 'cc';
+import { _decorator, Component, instantiate, Node } from 'cc';
 import { SpawnData } from '../Spawn/SpawnInformation';
 
 const { ccclass } = _decorator;

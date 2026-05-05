@@ -16,7 +16,7 @@ export class SceneManager extends Component {
     }
 
     protected start(): void {
-        mEventEmitter.instance.registerEvent('CHANGE_SCENE', this.loadScene.bind(this), this);
+        mEventEmitter.instance.registerEvent(CEvent.SCENE.CHANGE_SCENE, this.loadScene.bind(this), this);
     }
 
     protected onDestroy(): void {
