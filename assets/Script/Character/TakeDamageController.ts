@@ -19,7 +19,7 @@ export class TakeDamageController extends Component {
 
     private onCollisionEnter(self: Collider2D, other: Collider2D, contact: IPhysics2DContact | null) {
         other.node.active = false;
-        const damage = other.getComponent(EnemyController).damage;
+        const damage = other.getComponent(EnemyController).stats.damage;
         this.characterNode.emit(CEvent.ROUND.PLAYER_TAKE_DAMAGE, damage);
     }
 }
