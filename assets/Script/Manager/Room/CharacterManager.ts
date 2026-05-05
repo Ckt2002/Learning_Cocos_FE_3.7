@@ -1,4 +1,4 @@
-import { _decorator, Component, Node } from 'cc';
+import { _decorator, Component, Node, Vec2 } from 'cc';
 import { CharacterController } from '../../Character/CharacterController';
 import { CInputName } from '../../Constant/CInputName';
 import { CRoundEvent } from '../../Constant/CRoundEvent';
@@ -6,14 +6,11 @@ import { GameManager } from '../GameManager';
 import { RoomManager } from '../Layer/RoomManager';
 import { ERoundStatus } from '../../Enum/ERoundStatus';
 import { CharacterAnimation } from '../../Character/CharacterAnimation';
-import { ICharacterState } from '../../Character/ICharacterState';
-import { PortalState } from '../../Character/PortalState';
-import { ICharacter } from '../../Character/ICharacter';
+import { CAnimationName } from '../../Constant/CAnimationName';
 const { ccclass, property } = _decorator;
 
 @ccclass('CharacterManager')
-export class CharacterManager extends Component implements ICharacter {
-
+export class CharacterManager extends Component {
     public static instance: CharacterManager = null;
 
     @property(CharacterController)
@@ -28,12 +25,14 @@ export class CharacterManager extends Component implements ICharacter {
     @property(Node)
     bulletManagerNode: Node = null;
 
-    public moveDirectionY: number = 0;
+    private moveDirectionY: number = 0;
+    private isAlive: boolean = true;
     private timeOutObject: any = null;
-    private currentState: ICharacterState = null;
 
     protected onLoad(): void {
-        if (!CharacterManager.instance) CharacterManager.instance = this;
+        if (!CharacterManager.instance) {
+            CharacterManager.instance = this;
+        }
     }
 
     protected start(): void {
@@ -46,14 +45,19 @@ export class CharacterManager extends Component implements ICharacter {
     }
 
     protected update(dt: number): void {
-        if (GameManager.pauseGame) return;
-        this.currentState?.onUpdate(this, dt);
+        if (GameManager.pauseGame) {
+            return;
+        }
+        this.move(dt);
     }
 
     protected onDestroy(): void {
         this.node.targetOff(this);
         this.roomManager.node.targetOff(this);
-        this.clearDeadTimeout();
+        if (this.timeOutObject) {
+            clearTimeout(this.timeOutObject);
+            this.timeOutObject = null;
+        }
         CharacterManager.instance = null;
     }
 
@@ -68,42 +72,62 @@ export class CharacterManager extends Component implements ICharacter {
         this.roomManager.node.on(CRoundEvent.RESET_ROUND, this.reset, this);
     }
 
-    public changeState(next: ICharacterState): void {
-        this.currentState?.onExit(this);
-        this.currentState = next;
-        this.currentState.onEnter(this);
+    private setDirection(direction: number): void {
+        this.moveDirectionY = direction;
     }
 
-    private setDirection(direction: number): void {
-        console.log(direction)
-        this.moveDirectionY = direction;
+    private move(dt: number): void {
+        if (!this.isAlive) {
+            return;
+        }
+        if (!this.characterController || this.moveDirectionY === 0) {
+            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
+            return;
+        }
+
+        const characterNode = this.characterController.node;
+        const currentPosition = characterNode.position;
+        if (!this.checkValidMove(currentPosition.y, this.characterController.limitVertical)) {
+            this.characterAnimation.setAnimation(0, CAnimationName.IDLE, true);
+            return;
+        }
+
+        this.characterAnimation.setAnimation(0, CAnimationName.RUN, true);
+
+        characterNode.setPosition(
+            currentPosition.x,
+            currentPosition.y + dt * this.characterController.moveSpeed * this.moveDirectionY
+        );
     }
 
     private onSwitchBullet(): void {
         this.bulletManagerNode.emit(CInputName.SWITCH_BULLET);
     }
 
-    private takeDamage(value: number): void {
-        this.currentState?.onTakeDamage?.(this, value);
+    private checkValidMove(currentPositionY: number, limit: Vec2): boolean {
+        return this.moveDirectionY > 0 && currentPositionY < limit.y ||
+            this.moveDirectionY < 0 && currentPositionY > limit.x
     }
 
-    public onDead(): void {
+    private takeDamage(value: number): void {
+        this.isAlive = this.characterController.takeDamage(value);
+        if (this.isAlive) {
+            return;
+        }
+        this.characterAnimation.setAnimation(0, CAnimationName.DEATH, false);
         this.timeOutObject = setTimeout(() => {
             this.roomManager.endRound(ERoundStatus.LOSE);
         }, 3000);
     }
 
-    private clearDeadTimeout(): void {
+    public reset() {
+        this.isAlive = true;
+        this.characterController.reset();
+        this.characterAnimation.setAnimation(0, CAnimationName.PORTAL, false);
+        this.characterAnimation.changeAnimation(0, CAnimationName.IDLE, 0, true);
         if (this.timeOutObject) {
             clearTimeout(this.timeOutObject);
             this.timeOutObject = null;
         }
-    }
-
-    public reset(): void {
-        this.clearDeadTimeout();
-        this.moveDirectionY = 0;
-        this.characterController.reset();
-        this.changeState(new PortalState());
     }
 }
