@@ -1,7 +1,8 @@
 import { _decorator, director } from 'cc';
 import { UIElement } from './UIElement';
-import { IJackpotData, IJoinGameData, IMainBetData } from '../../interface/IJoinGameData';
+import { IJackpotData, IJoinGameData } from '../../interface/IJoinGameData';
 import * as utils from '../../utils/utils';
+import { CEvent } from '../../constant/CEvent';
 const { ccclass } = _decorator;
 
 @ccclass('UIJackpot')
@@ -13,7 +14,7 @@ export abstract class UIJackpot extends UIElement {
     protected onLoad(): void {
         super.onLoad();
         this.currentBetIndex = 1;
-        director.on("CHANGE_BET_TOTAL", this.changeBetSize, this);
+        director.on(CEvent.UI.CHANGE_BET_SIZE, this.changeBetSize, this);
     }
 
     protected onSetupUI(convertedData: IJoinGameData) {

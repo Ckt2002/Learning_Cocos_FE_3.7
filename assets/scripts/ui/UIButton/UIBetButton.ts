@@ -1,6 +1,7 @@
 import { _decorator, director, Enum } from 'cc';
 import { EBetButtonType } from '../../enum/EUIType';
 import { UIButton } from './UIButton';
+import { CEvent } from '../../constant/CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIBetButton')
@@ -10,7 +11,7 @@ export class UIBetButton extends UIButton {
 
     protected onLoad(): void {
         super.onLoad();
-        director.on("UPDATE_INTERACTABLE", this.onChangeInteract, this);
+        director.on(CEvent.Button.UPDATE_INTERACTABLE, this.onChangeInteract, this);
     }
 
     private onChangeInteract(type: EBetButtonType, isInteract: boolean) {
@@ -24,13 +25,11 @@ export class UIBetButton extends UIButton {
     protected onClick(): void {
         switch (this.buttonType) {
             case EBetButtonType.INCREASE:
-                director.emit("CHANGE_BET_SIZE", 1);
-                director.emit("CHANGE_BET_TOTAL", 1);
+                director.emit(CEvent.UI.CHANGE_BET_SIZE, 1);
                 break;
 
             case EBetButtonType.DECREASE:
-                director.emit("CHANGE_BET_SIZE", -1);
-                director.emit("CHANGE_BET_TOTAL", -1);
+                director.emit(CEvent.UI.CHANGE_BET_SIZE, -1);
                 break;
 
             default:

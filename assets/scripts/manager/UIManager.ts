@@ -1,6 +1,7 @@
 import { _decorator, Component, director } from 'cc';
 import { GameEventManager } from '../core/GameEventManager';
 import { IJoinGameData, IMainBetData } from '../interface/IJoinGameData';
+import { CEvent } from '../constant/CEvent';
 const { ccclass } = _decorator;
 
 @ccclass('UIManager')
@@ -22,6 +23,6 @@ export class UIManager extends Component {
             convertedBetData.push({ key: detail[0], value: +detail[1] });
         }
         convertedData.mainBet = convertedBetData;
-        director.emit("SETUP_UI", convertedData);
+        director.emit(CEvent.UI.SETUP_UI, convertedData);
     }
 }
