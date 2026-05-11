@@ -42,11 +42,11 @@ After a successful join game, the client receives join game data (sample in `scr
 
 ## Sample data – JoinGame.json
 
-| Field    | Description |
-|----------|-------------|
-| `mainBet` | String of `BetId;TotalBet` pairs separated by commas. |
+| Field     | Description                                                                                                                        |
+| --------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `mainBet` | String of `BetId;TotalBet` pairs separated by commas.                                                                              |
 | `jackpot` | Object: key is jackpot id (e.g. `1_USD_GRAND`), value is amount. Index order 1, 2, … matches the order of bet levels in `mainBet`. |
-| `wallet`  | Wallet balance (number). |
+| `wallet`  | Wallet balance (number).                                                                                                           |
 
 **Format:** Wallet, Jackpot, Bet Value and Win Amount labels must display values using **`formatMoney`** from `scripts/utils/utils.ts`.
 

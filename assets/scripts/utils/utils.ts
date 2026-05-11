@@ -42,12 +42,12 @@ export function tweenMoney(label: Label, duration: number, endValue: number, opt
 	const _target = { value: currentVal };
 	let tweenMoney = tween(_target)
 		.to(duration, { value: endValue }, {
-            progress: (start, end, current, ratio) => {
-                label.string = formatter(Number(current));
-                onUpdateCallback && onUpdateCallback(_target, ratio);
-                return start + (end - start) * ratio;
-            },
-        })
+			progress: (start, end, current, ratio) => {
+				label.string = formatter(Number(current));
+				onUpdateCallback && onUpdateCallback(_target, ratio);
+				return start + (end - start) * ratio;
+			},
+		})
 		.call(() => {
 			label.string = formatter(endValue);
 			onCompleteCallback && onCompleteCallback();
