@@ -7,5 +7,10 @@ export const CEvent = {
     UI: {
         SETUP_UI: "SETUP_UI",
         CHANGE_BET_SIZE: "CHANGE_BET_SIZE",
+    },
+
+    Game: {
+        SPAWN: "SPAWN",
+        SPIN: "SPIN",
     }
 }

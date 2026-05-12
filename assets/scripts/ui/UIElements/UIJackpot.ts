@@ -7,7 +7,6 @@ const { ccclass } = _decorator;
 
 @ccclass('UIJackpot')
 export abstract class UIJackpot extends UIElement {
-
     private currentBetIndex = 0;
     private jackpotData: IJackpotData;
 

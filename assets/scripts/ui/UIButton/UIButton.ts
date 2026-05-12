@@ -22,7 +22,5 @@ export abstract class UIButton extends Component {
         this.button.clickEvents.push(clickEvent);
     }
 
-    protected onClick() {
-
-    }
+    protected onClick() { }
 }
