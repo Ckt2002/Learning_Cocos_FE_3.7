@@ -36,8 +36,7 @@ export class GameManager extends Component {
         convertedData.mainBet = betData;
         this.gameData = convertedData;
 
-        this.currentBetId = betData[this.currentMainBetIndex].key;
-        console.log(this.currentBetId);
+        this.currentBetId = betData[0].key;
 
         director.emit(CEvent.UI.SETUP_UI, convertedData);
     }
@@ -47,7 +46,6 @@ export class GameManager extends Component {
         this.currentMainBetIndex = Math.max(0, Math.min(4, this.currentMainBetIndex));
 
         this.currentBetId = (this.gameData.mainBet as IMainBetData[])[this.currentMainBetIndex].key;
-        console.log(this.currentBetId);
     }
 
     private onSpin() {

@@ -29,7 +29,7 @@ export class UIMoney extends Component {
     private betNumber: number = 25;
 
     protected onLoad(): void {
-        this.currentBetIndex = 1;
+        this.currentBetIndex = 0;
         director.on(CEvent.UI.SETUP_UI, this.onSetupUI, this);
         director.on(CEvent.UI.CHANGE_BET_SIZE, this.changeBetSize, this);
         director.on(CEvent.Game.COMPLETED, this.updateWinAmount, this);
@@ -46,7 +46,7 @@ export class UIMoney extends Component {
     private updateUI() {
         utils.tweenMoney(this.walletLabel, 0.3, this.wallet, { acceptRunDown: true }, (value: any) => '$' + utils.formatMoney(value));
 
-        const jackpotValue = this.jackpotData[`${this.currentBetIndex}_USD_GRAND`];
+        const jackpotValue = this.jackpotData[`${this.currentBetIndex === 0 ? 1 : this.currentBetIndex}_USD_GRAND`];
         utils.tweenMoney(this.jackpotLabel, 0.3, jackpotValue, { acceptRunDown: true }, (value: any) => utils.formatMoney(value) + '$');
 
         const totalValue = this.mainBetData[this.currentBetIndex].value;
@@ -74,7 +74,7 @@ export class UIMoney extends Component {
         }
 
         if (this.currentBetIndex === 0) {
-            this.currentBetIndex = 1;
+            this.currentBetIndex = 0;
             director.emit(CEvent.Button.UPDATE_INTERACTABLE, EBetButtonType.DECREASE, false);
         }
         if (this.currentBetIndex >= this.mainBetData.length - 1) {
