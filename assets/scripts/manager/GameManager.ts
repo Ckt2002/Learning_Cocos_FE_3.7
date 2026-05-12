@@ -33,7 +33,7 @@ export class GameManager extends Component {
             const detail = value.split(';');
             betData.push({ key: detail[0], value: +detail[1] });
         }
-        convertedData.mainBet = betData;
+        convertedData.mainBet = betData as IMainBetData[];
         this.gameData = convertedData;
 
         this.currentBetId = betData[0].key;
@@ -50,5 +50,7 @@ export class GameManager extends Component {
 
     private onSpin() {
         this.gameDirector.sendSpinRequest(this.currentBetId);
+        this.gameData.wallet -= this.gameData.mainBet[this.currentMainBetIndex].value;
+        director.emit(CEvent.UI.UPDATE_WALLET, this.gameData.wallet);
     }
 }

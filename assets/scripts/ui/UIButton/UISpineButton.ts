@@ -8,10 +8,10 @@ export class UISpineButton extends UIButton {
 
     protected onLoad(): void {
         super.onLoad();
-        director.on(CEvent.Game.COMPLETED, this.onChangeInteract, this);
+        director.on(CEvent.Button.ENABLE_SPIN, this.onEnableInteract, this);
     }
 
-    private onChangeInteract() {
+    private onEnableInteract() {
         this.button.interactable = true;
     }
 

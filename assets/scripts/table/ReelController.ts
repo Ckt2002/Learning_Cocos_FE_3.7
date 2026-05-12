@@ -6,36 +6,30 @@ export class ReelController extends Component {
     @property([SpriteFrame])
     symbolSpriteFrames: SpriteFrame[] = [];
 
-    resultSymbols: number[] = [];
-    symbols: Node[] = [];
-    bottomLimit: number = 65;
-    originalPosition: Vec3;
-    step: number = 10;
-    resultIndex: number = 0;
     onSpinCompleted: Function = null;
+
+    private resultSymbols: number[] = [];
+    private symbols: Node[] = [];
+    private bottomLimit: number = 65;
+    private maxStep: number = 20;
+    private currentStep: number;
+    private resultIndex: number = 0;
 
     protected onLoad(): void {
         this.symbols = this.node.children;
-        this.originalPosition = this.node.getPosition();
     }
 
-    setupResultSymbols(value: number) {
-        this.resultSymbols.push(value);
+    setupStep(offset: number) {
+        this.maxStep += offset;
+        this.currentStep = this.maxStep;
+    }
+
+    setupResultSymbol(resultSymbol: number) {
+        this.resultSymbols.push(resultSymbol);
     }
 
     clearResultSymbols() {
         this.resultSymbols = [];
-    }
-
-    randomSymbol() {
-        const randomIndex = Math.floor(Math.random() * (this.symbolSpriteFrames.length - 1));
-        this.symbols[0].getComponent(Sprite).spriteFrame = this.symbolSpriteFrames[randomIndex];
-    }
-
-    specificSymbol() {
-        const result = this.resultSymbols[this.resultIndex] - 2;
-        this.symbols[0].getComponent(Sprite).spriteFrame = this.symbolSpriteFrames[result];
-        this.resultIndex++;
     }
 
     spin() {
@@ -53,11 +47,11 @@ export class ReelController extends Component {
     }
 
     private loopSpin() {
-        if (this.step === 4) {
+        if (this.currentStep === 4) {
             this.endSpin();
             return;
         }
-        this.step--;
+        this.currentStep--;
         tween(this.node)
             .by(0.1, { position: new Vec3(0, -154) }, {
                 onComplete: () => {
@@ -68,16 +62,16 @@ export class ReelController extends Component {
     }
 
     private endSpin() {
-        if (this.step === 0) {
-            this.step = 10;
+        if (this.currentStep === 0) {
+            this.currentStep = this.maxStep;
             this.onSpinCompleted?.();
             return;
         }
-        this.step--;
+        this.currentStep--;
         tween(this.node)
             .by(0.1, { position: new Vec3(0, -154) }, {
                 onComplete: () => {
-                    if (this.step >= 1) {
+                    if (this.currentStep >= 1) {
                         this.onReorder(this.specificSymbol.bind(this));
                     } else {
                         this.onReorder(this.randomSymbol.bind(this));
@@ -98,5 +92,16 @@ export class ReelController extends Component {
                 break;
             }
         }
+    }
+
+    randomSymbol() {
+        const randomIndex = Math.floor(Math.random() * (this.symbolSpriteFrames.length - 1));
+        this.symbols[0].getComponent(Sprite).spriteFrame = this.symbolSpriteFrames[randomIndex];
+    }
+
+    specificSymbol() {
+        const index = this.resultSymbols[this.resultIndex] - 2;
+        this.symbols[0].getComponent(Sprite).spriteFrame = this.symbolSpriteFrames[index];
+        this.resultIndex++;
     }
 }

@@ -7,6 +7,7 @@ export abstract class UIButton extends Component {
 
     protected onLoad(): void {
         this.button = this.getComponent(Button);
+        this.button.interactable = false;
     }
 
     protected start(): void {

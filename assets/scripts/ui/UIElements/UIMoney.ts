@@ -30,21 +30,26 @@ export class UIMoney extends Component {
 
     protected onLoad(): void {
         this.currentBetIndex = 0;
-        director.on(CEvent.UI.SETUP_UI, this.onSetupUI, this);
+        director.on(CEvent.UI.SETUP_UI, this.init, this);
         director.on(CEvent.UI.CHANGE_BET_SIZE, this.changeBetSize, this);
+        director.on(CEvent.UI.UPDATE_WALLET, this.updateWallet, this);
         director.on(CEvent.Game.COMPLETED, this.updateWinAmount, this);
     }
 
-    protected onSetupUI(convertedData: IJoinGameData) {
+    protected init(convertedData: IJoinGameData) {
         this.winAmountLabel.string = '';
         this.wallet = convertedData.wallet;
         this.jackpotData = convertedData.jackpot;
         this.mainBetData = (convertedData.mainBet as IMainBetData[]);
-        this.updateUI();
+
+        director.emit(CEvent.Button.UPDATE_INTERACTABLE, EBetButtonType.INCREASE, true);
+        director.emit(CEvent.Button.ENABLE_SPIN);
+
+        this.updateLabels();
     }
 
-    private updateUI() {
-        utils.tweenMoney(this.walletLabel, 0.3, this.wallet, { acceptRunDown: true }, (value: any) => '$' + utils.formatMoney(value));
+    private updateLabels() {
+        this.updateWallet(this.wallet);
 
         const jackpotValue = this.jackpotData[`${this.currentBetIndex === 0 ? 1 : this.currentBetIndex}_USD_GRAND`];
         utils.tweenMoney(this.jackpotLabel, 0.3, jackpotValue, { acceptRunDown: true }, (value: any) => utils.formatMoney(value) + '$');
@@ -56,9 +61,14 @@ export class UIMoney extends Component {
         utils.tweenMoney(this.betSizeLabel, 0.3, betSizeValue, { acceptRunDown: true }, (value: any) => '$' + utils.formatMoney(value));
     }
 
+    private updateWallet(value: number) {
+        this.wallet = value;
+        utils.tweenMoney(this.walletLabel, 0.3, value, { acceptRunDown: true }, (value: any) => '$' + utils.formatMoney(value));
+    }
+
     private updateWinAmount(amount: number) {
         this.wallet += amount;
-        utils.tweenMoney(this.walletLabel, 0.3, this.wallet, { acceptRunDown: true }, (value: any) => '$' + utils.formatMoney(value));
+        this.updateWallet(this.wallet);
 
         utils.tweenMoney(this.winAmountLabel, 0.3, amount, { acceptRunDown: true }, (value: any) => utils.formatMoney(value) + '$');
     }
@@ -81,6 +91,7 @@ export class UIMoney extends Component {
             this.currentBetIndex = this.mainBetData.length - 1;
             director.emit(CEvent.Button.UPDATE_INTERACTABLE, EBetButtonType.INCREASE, false);
         }
-        this.updateUI();
+
+        this.updateLabels();
     }
 }

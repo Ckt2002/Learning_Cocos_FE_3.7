@@ -21,14 +21,17 @@ export class TableController extends Component {
     }
 
     protected start(): void {
+        let stepOffset = 0;
         for (let reel of this.reels) {
             reel.onSpinCompleted = this.completedSpin.bind(this);
+            reel.setupStep(stepOffset * 4);
+            stepOffset++;
         }
     }
 
     private onSpin(data: any) {
         this.countCompleted = 0;
-        this.setupResultSymbols(data as IBetData);
+        this.setupReels(data as IBetData);
         this.runSpin();
     }
 
@@ -38,7 +41,7 @@ export class TableController extends Component {
         }
     }
 
-    private setupResultSymbols(data: IBetData) {
+    private setupReels(data: IBetData) {
         this.betData = data;
         const matrix = this.betData.matrix as number[];
         let reelIndex = 0;
@@ -54,7 +57,7 @@ export class TableController extends Component {
                 reelIndex++;
             }
             reelCount++;
-            this.reels[reelIndex].setupResultSymbols(matrix[index]);
+            this.reels[reelIndex].setupResultSymbol(matrix[index]);
         }
     }
 
@@ -68,5 +71,6 @@ export class TableController extends Component {
 
     private onCompleted() {
         director.emit(CEvent.Game.COMPLETED, this.betData.winAmount);
+        director.emit(CEvent.Button.ENABLE_SPIN);
     }
 }
