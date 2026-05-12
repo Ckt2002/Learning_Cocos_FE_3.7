@@ -12,6 +12,7 @@ export class ReelController extends Component {
     originalPosition: Vec3;
     step: number = 10;
     resultIndex: number = 0;
+    onSpinCompleted: Function = null;
 
     protected onLoad(): void {
         this.symbols = this.node.children;
@@ -69,6 +70,7 @@ export class ReelController extends Component {
     private endSpin() {
         if (this.step === 0) {
             this.step = 10;
+            this.onSpinCompleted?.();
             return;
         }
         this.step--;

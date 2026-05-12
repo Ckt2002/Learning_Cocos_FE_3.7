@@ -12,5 +12,6 @@ export const CEvent = {
     Game: {
         SPAWN: "SPAWN",
         SPIN: "SPIN",
+        COMPLETED: "COMPLETED",
     }
 }

@@ -14,12 +14,14 @@ export class GameManager extends Component {
     gameDirector: GameDirector;
 
     private gameData: IJoinGameData = null;
+    private currentMainBetIndex: number = 0;
     private currentBetId: string = '10';
 
     protected onLoad(): void {
         this.gameEvent.on("JOIN_GAME_SUCCESS", this.onJoinGameSuccess, this);
 
         director.on(CEvent.Game.SPIN, this.onSpin, this);
+        director.on(CEvent.UI.CHANGE_BET_SIZE, this.onChangeBet, this);
     }
 
     private onJoinGameSuccess(data: any) {
@@ -33,11 +35,19 @@ export class GameManager extends Component {
         }
         convertedData.mainBet = betData;
         this.gameData = convertedData;
+
+        this.currentBetId = betData[this.currentMainBetIndex].key;
+        console.log(this.currentBetId);
+
         director.emit(CEvent.UI.SETUP_UI, convertedData);
     }
 
-    private onChangeBet() {
-        // this.currentBetId = ...;
+    private onChangeBet(value: number) {
+        this.currentMainBetIndex += value;
+        this.currentMainBetIndex = Math.max(0, Math.min(4, this.currentMainBetIndex));
+
+        this.currentBetId = (this.gameData.mainBet as IMainBetData[])[this.currentMainBetIndex].key;
+        console.log(this.currentBetId);
     }
 
     private onSpin() {

@@ -1,7 +1,8 @@
-import { _decorator, Component } from 'cc';
+import { _decorator, Component, director } from 'cc';
 import { GameEventManager } from '../core/GameEventManager';
 import { IBetData } from '../interface/IBetData';
 import { ReelController } from './ReelController';
+import { CEvent } from '../constant/CEvent';
 const { ccclass, property } = _decorator;
 
 @ccclass('TableController')
@@ -13,27 +14,33 @@ export class TableController extends Component {
     reels: ReelController[] = [];
 
     countCompleted: number = 0;
+    betData: IBetData = null;
 
     protected onLoad(): void {
         this.gameEvent.on("SPIN_REQUEST", this.onSpin, this);
     }
 
+    protected start(): void {
+        for (let reel of this.reels) {
+            reel.onSpinCompleted = this.completedSpin.bind(this);
+        }
+    }
+
     private onSpin(data: any) {
+        this.countCompleted = 0;
         this.setupResultSymbols(data as IBetData);
         this.runSpin();
     }
 
     private runSpin() {
         for (let reel of this.reels) {
-            this.scheduleOnce(() => {
-                reel.spin();
-            }, 1);
+            reel.spin();
         }
     }
 
     private setupResultSymbols(data: IBetData) {
-        const betData = data;
-        const matrix = betData.matrix as number[];
+        this.betData = data;
+        const matrix = this.betData.matrix as number[];
         let reelIndex = 0;
         let reelCount = 0;
 
@@ -55,7 +62,11 @@ export class TableController extends Component {
         this.countCompleted++;
 
         if (this.countCompleted === 5) {
-
+            this.onCompleted();
         }
+    }
+
+    private onCompleted() {
+        director.emit(CEvent.Game.COMPLETED, this.betData.winAmount);
     }
 }
